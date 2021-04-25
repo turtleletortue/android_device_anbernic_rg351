@@ -1,0 +1,45 @@
+<mixer>
+	<!-- These are the initial mixer settings -->
+	<ctl name="Capture MIC Path" value="MIC OFF" />
+	<ctl name="Playback Path" value="OFF" />
+
+	<path name="speaker">
+		<ctl name="Playback Path" value="SPK" />
+	</path>
+	
+	<path name="headphones">
+		<ctl name="Playback Path" value="HP" />
+	</path>
+	
+	<path name="speaker-and-headphones">
+		<ctl name="Playback Path" value="SPK_HP" />
+	</path>
+	
+	<!-- Playback paths -->
+	<path name="media-speaker">
+		<ctl name="Playback Path" value="SPK" />
+	</path>
+	
+	<path name="media-speaker-off">
+		<ctl name="Playback Path" value="OFF" />
+	</path>
+	
+	<path name="media-headphones">
+		<ctl name="Playback Path" value="HP_NO_MIC" />
+	</path>
+	
+	<!-- Capture paths -->
+	<path name="headset-mic">
+		<ctl name="Capture MIC Path" value="Main Mic" />
+	</path>
+	
+	<!-- Off paths -->
+	<path name="playback-off">
+		<ctl name="Playback Path" value="OFF" />
+	</path>
+	
+	<path name="capture-off">
+		<ctl name="Capture MIC Path" value="MIC OFF" />
+	</path>
+	
+</mixer>

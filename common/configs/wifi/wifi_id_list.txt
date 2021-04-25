@@ -1,0 +1,185 @@
+0e8d 7610 mt7610 /vendor/etc/modprobe.d/mt7610
+148f 5572 rt2800usb /vendor/etc/modprobe.d/rt2800usb
+148f 5370 rt2800usb /vendor/etc/modprobe.d/rt2800usb
+0bda b82b 8821cu /vendor/etc/modprobe.d/8821cu
+0bda b820 8821cu /vendor/etc/modprobe.d/8821cu
+0bda c821 8821cu /vendor/etc/modprobe.d/8821cu
+0bda c820 8821cu /vendor/etc/modprobe.d/8821cu
+0bda c82a 8821cu /vendor/etc/modprobe.d/8821cu
+0bda c82b 8821cu /vendor/etc/modprobe.d/8821cu
+0bda c811 8811cu /vendor/etc/modprobe.d/8821cu
+0bda 8811 8811cu /vendor/etc/modprobe.d/8821cu
+0bda 2006 8821cu /vendor/etc/modprobe.d/8821cu
+0bda 8731 8821cu /vendor/etc/modprobe.d/8821cu
+0bda c80c 8821cu /vendor/etc/modprobe.d/8821cu
+2001 331d 8821cu /vendor/etc/modprobe.d/8821cu
+0bda b82c 8822bu /vendor/etc/modprobe.d/88x2bu /* Default ID for USB multi-function */
+0bda b812 8822bu /vendor/etc/modprobe.d/88x2bu /* Default ID for USB Single-function, WiFi only */
+13b1 0043 8822bu /vendor/etc/modprobe.d/88x2bu /* Alpha - Alpha*/
+0b05 1841 8822bu /vendor/etc/modprobe.d/88x2bu /* ASUS AC1300 USB-AC55 B1 */
+0b05 184c 8822bu /vendor/etc/modprobe.d/88x2bu /* ASUS U2*/
+7392 b822 8822bu /vendor/etc/modprobe.d/88x2bu /* Edimax EW-7822ULC */
+7392 c822 8822bu /vendor/etc/modprobe.d/88x2bu /* Edimax EW-7822UTC */
+2001 331e 8822bu /vendor/etc/modprobe.d/88x2bu /* Dlink - DWA-181*/
+2001 331c 8822bu /vendor/etc/modprobe.d/88x2bu /* Dlink - DWA-182*/
+0846 9055 8822bu /vendor/etc/modprobe.d/88x2bu /* NetGear A6150 */
+2357 012d 8822bu /vendor/etc/modprobe.d/88x2bu /* TP-Link Archer T3U */
+2357 0138 8822bu /vendor/etc/modprobe.d/88x2bu /* TP-Link Archer T3U Plus */
+2357 0115 8822bu /vendor/etc/modprobe.d/88x2bu /* TP-Link Archer T4U V3 */
+20f4 808a 8822bu /vendor/etc/modprobe.d/88x2bu /* TRENDnet TEW-808UBM */
+0bda 8813 8814au /vendor/etc/modprobe.d/8814au
+2001 331a 8814au /vendor/etc/modprobe.d/8814au /* D-Link - D-Link */
+0b05 1817 8814au /vendor/etc/modprobe.d/8814au /* ASUS - ASUSTeK */
+0b05 1852 8814au /vendor/etc/modprobe.d/8814au /* ASUS - ASUSTeK */
+0b05 1853 8814au /vendor/etc/modprobe.d/8814au /* ASUS - ASUSTeK */
+056e 400b 8814au /vendor/etc/modprobe.d/8814au /* ELECOM - ELECOM */
+056e 400d 8814au /vendor/etc/modprobe.d/8814au /* ELECOM - ELECOM */
+7392 a834 8814au /vendor/etc/modprobe.d/8814au /* Edimax - Edimax */
+7392 a833 8814au /vendor/etc/modprobe.d/8814au /* Edimax - AC1750 */
+0bda 8813 8814au /vendor/etc/modprobe.d/8814au /* Edimax - EDUP Adapters */
+0e66 0026 8814au /vendor/etc/modprobe.d/8814au /* Hawking Technologies - HW17ACU*/
+2357 0106 8814au /vendor/etc/modprobe.d/8814au /* TP-LINK Archer T9UH */
+20f4 809a 8814au /vendor/etc/modprobe.d/8814au /* TRENDnet - TRENDnet */
+20f4 809b 8814au /vendor/etc/modprobe.d/8814au /* TRENDnet TEW-809UB */
+0846 9054 8814au /vendor/etc/modprobe.d/8814au /* Netgear A7000 */
+0bda 8812 8812au /vendor/etc/modprobe.d/8812au
+0bda 881a 8812au /vendor/etc/modprobe.d/8812au
+0bda 881b 8812au /vendor/etc/modprobe.d/8812au
+0bda 881c 8812au /vendor/etc/modprobe.d/8812au
+050d 1106 8812au /vendor/etc/modprobe.d/8812au /* Belkin - sercomm */
+7392 a822 8812au /vendor/etc/modprobe.d/8812au /* Edimax - EW-7822UAC */
+0df6 0074 8812au /vendor/etc/modprobe.d/8812au /* Sitecom - Edimax */
+04bb 0952 8812au /vendor/etc/modprobe.d/8812au /* I-O DATA - Edimax */
+0789 016e 8812au /vendor/etc/modprobe.d/8812au /* Logitec - Edimax */
+0409 0408 8812au /vendor/etc/modprobe.d/8812au /* NEC - */
+0b05 17d2 8812au /vendor/etc/modprobe.d/8812au /* ASUS - Edimax */
+0e66 0022 8812au /vendor/etc/modprobe.d/8812au /* HAWKING - Edimax */
+0586 3426 8812au /vendor/etc/modprobe.d/8812au /* ZyXEL - */
+2001 3313 8812au /vendor/etc/modprobe.d/8812au /* D-Link - ALPHA */
+1058 0632 8812au /vendor/etc/modprobe.d/8812au /* WD - Cybertan*/
+1740 0100 8812au /vendor/etc/modprobe.d/8812au /* EnGenius - EnGenius */
+2019 ab30 8812au /vendor/etc/modprobe.d/8812au /* Planex - Abocom */
+07b8 8812 8812au /vendor/etc/modprobe.d/8812au /* Abocom - Abocom */
+0846 9051 8812au /vendor/etc/modprobe.d/8812au /* Netgear A6200 v2 */
+2001 330e 8812au /vendor/etc/modprobe.d/8812au /* D-Link - ALPHA */
+2001 3313 8812au /vendor/etc/modprobe.d/8812au /* D-Link - ALPHA */
+2001 3315 8812au /vendor/etc/modprobe.d/8812au /* D-Link - D-Link DWA-182 (Rev. C1) */
+2001 3316 8812au /vendor/etc/modprobe.d/8812au /* D-Link - Cameo */
+13b1 003f 8812au /vendor/etc/modprobe.d/8812au /* Linksys - WUSB6300 */
+2357 0101 8812au /vendor/etc/modprobe.d/8812au /* TP-Link - Archer T4U AC1200 */
+2357 0103 8812au /vendor/etc/modprobe.d/8812au /* TP-Link - T4UH */
+2357 010d 8812au /vendor/etc/modprobe.d/8812au /* TP-Link - Archer T4U AC1300 */
+2357 010e 8812au /vendor/etc/modprobe.d/8812au /* TP-Link - Archer T4UH AC1300 */
+2357 010f 8812au /vendor/etc/modprobe.d/8812au /* TP-Link - T4UHP */
+2357 0122 8812au /vendor/etc/modprobe.d/8812au /* TP-Link - T4UHP (other) */
+20f4 805b 8812au /vendor/etc/modprobe.d/8812au /* TRENDnet - TEW-805UB */
+0411 025d 8812au /vendor/etc/modprobe.d/8812au /* Buffalo - WI-U3-866D */
+050d 1109 8812au /vendor/etc/modprobe.d/8812au /* Belkin F9L1109 - SerComm */
+148f 9097 8812au /vendor/etc/modprobe.d/8812au /* Amped Wireless ACA1 */
+2604 0012 8812au /vendor/etc/modprobe.d/8812au /* Tenda U12 */
+0bda 0811 8821au /vendor/etc/modprobe.d/8821au
+0bda 0821 8821au /vendor/etc/modprobe.d/8821au
+0bda 8822 8821au /vendor/etc/modprobe.d/8821au
+0bda a811 8821au /vendor/etc/modprobe.d/8821au
+0bda 0820 8821au /vendor/etc/modprobe.d/8821au
+0bda 0823 8821au /vendor/etc/modprobe.d/8821au
+7392 a811 8821au /vendor/etc/modprobe.d/8821au
+7392 a812 8821au /vendor/etc/modprobe.d/8821au
+7392 a813 8821au /vendor/etc/modprobe.d/8821au
+7392 b611 8821au /vendor/etc/modprobe.d/8821au
+04bb 0953 8821au /vendor/etc/modprobe.d/8821au
+2001 3314 8821au /vendor/etc/modprobe.d/8821au
+2001 3318 8821au /vendor/etc/modprobe.d/8821au
+0e66 0023 8821au /vendor/etc/modprobe.d/8821au
+056e 400e 8821au /vendor/etc/modprobe.d/8821au
+056e 400f 8821au /vendor/etc/modprobe.d/8821au
+0411 0242 8821au /vendor/etc/modprobe.d/8821au
+2019 ab32 8821au /vendor/etc/modprobe.d/8821au
+0846 9052 8821au /vendor/etc/modprobe.d/8821au
+0411 029b 8821au /vendor/etc/modprobe.d/8821au
+056e 4007 8821au /vendor/etc/modprobe.d/8821au
+0bda a811 8821au /vendor/etc/modprobe.d/8821au
+3823 6249 8821au /vendor/etc/modprobe.d/8821au
+2357 011e 8821au /vendor/etc/modprobe.d/8821au
+2357 0122 8821au /vendor/etc/modprobe.d/8821au
+2357 0120 8821au /vendor/etc/modprobe.d/8821au
+2357 011f 8821au /vendor/etc/modprobe.d/8821au
+20f4 804b 8821au /vendor/etc/modprobe.d/8821au
+0bda 8176 8192cu /vendor/etc/modprobe.d/8192cu /* 8188cu 1*1 dongole */
+0bda 8170 8192cu /vendor/etc/modprobe.d/8192cu /* 8188CE-VAU USB minCard */
+0bda 817e 8192cu /vendor/etc/modprobe.d/8192cu /* 8188CE-VAU USB minCard */
+0bda 817a 8192cu /vendor/etc/modprobe.d/8192cu /* 8188cu Slim Solo */
+0bda 817b 8192cu /vendor/etc/modprobe.d/8192cu /* 8188cu Slim Combo */
+0bda 817d 8192cu /vendor/etc/modprobe.d/8192cu /* 8188RU High-power USB Dongle */
+0bda 8754 8192cu /vendor/etc/modprobe.d/8192cu /* 8188 Combo for BC4 */
+0bda 817f 8192cu /vendor/etc/modprobe.d/8192cu /* 8188RU */
+0bda 818a 8192cu /vendor/etc/modprobe.d/8192cu /* RTL8188CUS-VL */
+0bda 018a 8192cu /vendor/etc/modprobe.d/8192cu /* RTL8188CTV */
+0bda 17c0 8192cu /vendor/etc/modprobe.d/8192cu /* RTK demoboard - USB-N10E */
+0bda 8177 8192cu /vendor/etc/modprobe.d/8192cu /* 8191cu 1*2 */
+0bda 8178 8192cu /vendor/etc/modprobe.d/8192cu /* 8192cu 2*2 */
+0bda 817c 8192cu /vendor/etc/modprobe.d/8192cu /* 8192CE-VAU USB minCard */
+0bda 8191 8192cu /vendor/etc/modprobe.d/8192cu /* 8192CU 2*2 */
+1058 0631 8192cu /vendor/etc/modprobe.d/8192cu /* Alpha, 8192CU */
+2019 ed17 8192cu /vendor/etc/modprobe.d/8192cu /* PCI - Edimax */
+0df6 0052 8192cu /vendor/etc/modprobe.d/8192cu /* Sitecom - Edimax */
+7392 7811 8192cu /vendor/etc/modprobe.d/8192cu /* Edimax - Edimax */
+07b8 8189 8192cu /vendor/etc/modprobe.d/8192cu /* Abocom - Abocom */
+0eb0 9071 8192cu /vendor/etc/modprobe.d/8192cu /* NO Brand - Etop */
+06f8 e033 8192cu /vendor/etc/modprobe.d/8192cu /* Hercules - Edimax */
+103c 1629 8192cu /vendor/etc/modprobe.d/8192cu /* HP - Lite-On ,8188CUS Slim Combo */
+2001 3308 8192cu /vendor/etc/modprobe.d/8192cu /* D-Link - Alpha */
+050d 1102 8192cu /vendor/etc/modprobe.d/8192cu /* Belkin - Edimax */
+2019 ab2a 8192cu /vendor/etc/modprobe.d/8192cu /* Planex - Abocom */
+20f4 648b 8192cu /vendor/etc/modprobe.d/8192cu /* TRENDnet - Cameo */
+4855 0090 8192cu /vendor/etc/modprobe.d/8192cu /*          - Feixun */
+13d3 3357 8192cu /vendor/etc/modprobe.d/8192cu /*          - AzureWave */
+0df6 005c 8192cu /vendor/etc/modprobe.d/8192cu /* Sitecom - Edimax */
+0bda 5088 8192cu /vendor/etc/modprobe.d/8192cu /* Thinkware - CC&C */
+4856 0091 8192cu /vendor/etc/modprobe.d/8192cu /* NetweeN - Feixun */
+0846 9041 8192cu /vendor/etc/modprobe.d/8192cu /* Netgear - Cameo */
+2019 4902 8192cu /vendor/etc/modprobe.d/8192cu /* Planex - Etop */
+2019 ab2e 8192cu /vendor/etc/modprobe.d/8192cu /* SW-WF02-AD15 -Abocom */
+2001 330b 8192cu /vendor/etc/modprobe.d/8192cu /* D-LINK - T&W */
+cdab 8010 8192cu /vendor/etc/modprobe.d/8192cu /* - - compare */
+0b05 17ba 8192cu /vendor/etc/modprobe.d/8192cu /* ASUS - Edimax */
+0bda 1e1e 8192cu /vendor/etc/modprobe.d/8192cu /* Intel - - */
+04bb 094c 8192cu /vendor/etc/modprobe.d/8192cu /* I-O DATA - Edimax */
+cdab 8011 8192cu /vendor/etc/modprobe.d/8192cu /* - - compare */
+0bda 0a8a 8192cu /vendor/etc/modprobe.d/8192cu /* Sony - Foxconn */
+0bda 317f 8192cu /vendor/etc/modprobe.d/8192cu /* Netcore,Netcore */
+13d3 3359 8192cu /vendor/etc/modprobe.d/8192cu /*  - Azwave */
+13d3 3358 8192cu /vendor/etc/modprobe.d/8192cu /*  - Azwave */
+04f2 aff7 8192cu /vendor/etc/modprobe.d/8192cu /* XAVI - XAVI */
+04f2 aff9 8192cu /vendor/etc/modprobe.d/8192cu /* XAVI - XAVI */
+04f2 affa 8192cu /vendor/etc/modprobe.d/8192cu /* XAVI - XAVI */
+04f2 aff8 8192cu /vendor/etc/modprobe.d/8192cu /* XAVI - XAVI */
+04f2 affb 8192cu /vendor/etc/modprobe.d/8192cu /* XAVI - XAVI */
+04f2 affc 8192cu /vendor/etc/modprobe.d/8192cu /* XAVI - XAVI */
+2019 1201 8192cu /vendor/etc/modprobe.d/8192cu /* Planex - Vencer */
+2001 3307 8192cu /vendor/etc/modprobe.d/8192cu /* D-Link - Cameo */
+2001 330a 8192cu /vendor/etc/modprobe.d/8192cu /* D-Link - Alpha */
+2001 3309 8192cu /vendor/etc/modprobe.d/8192cu /* D-Link - Alpha */
+0586 341f 8192cu /vendor/etc/modprobe.d/8192cu /* Zyxel - Abocom */
+7392 7822 8192cu /vendor/etc/modprobe.d/8192cu /* Edimax - Edimax */
+2019 ab2b 8192cu /vendor/etc/modprobe.d/8192cu /* Planex - Abocom */
+07b8 8178 8192cu /vendor/etc/modprobe.d/8192cu /* Abocom - Abocom */
+07aa 0056 8192cu /vendor/etc/modprobe.d/8192cu /* ATKK - Gemtek */
+4855 0091 8192cu /vendor/etc/modprobe.d/8192cu /*      - Feixun */
+050d 2102 8192cu /vendor/etc/modprobe.d/8192cu /* Belkin - Sercomm */
+050d 2103 8192cu /vendor/etc/modprobe.d/8192cu /* Belkin - Edimax */
+20f4 624d 8192cu /vendor/etc/modprobe.d/8192cu /* TRENDnet */
+0df6 0061 8192cu /vendor/etc/modprobe.d/8192cu /* Sitecom - Edimax */
+0b05 17ab 8192cu /vendor/etc/modprobe.d/8192cu /* ASUS - Edimax */
+0846 9021 8192cu /vendor/etc/modprobe.d/8192cu /* Netgear - Sercomm */
+0846 f001 8192cu /vendor/etc/modprobe.d/8192cu /* Netgear - Sercomm */
+0e66 0019 8192cu /vendor/etc/modprobe.d/8192cu /* Hawking,Edimax */
+0e66 0020 8192cu /vendor/etc/modprobe.d/8192cu /* Hawking  - Edimax */
+050d 1004 8192cu /vendor/etc/modprobe.d/8192cu /* Belkin - Edimax */
+0bda 2e2e 8192cu /vendor/etc/modprobe.d/8192cu /* Intel - - */
+2357 0100 8192cu /vendor/etc/modprobe.d/8192cu /* TP-Link - TP-Link */
+06f8 e035 8192cu /vendor/etc/modprobe.d/8192cu /* Hercules - Edimax */
+04bb 0950 8192cu /vendor/etc/modprobe.d/8192cu /* IO-DATA - Edimax */
+0df6 0070 8192cu /vendor/etc/modprobe.d/8192cu /* Sitecom - Edimax */
+0789 016d 8192cu /vendor/etc/modprobe.d/8192cu /* LOGITEC - Edimax */
+0bda 8186 8192cu /vendor/etc/modprobe.d/8192cu /* Intel-Xavi( Azwave) */

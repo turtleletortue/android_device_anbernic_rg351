@@ -246,6 +246,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PACKAGES += libGLES_mali.so 
 PRODUCT_PACKAGES += libGLES_android
 
+PRODUCT_PACKAGES += libwifi-hal-rtl
 
 # Graphics HAL
 # define MPP_BUF_TYPE_DRM 1

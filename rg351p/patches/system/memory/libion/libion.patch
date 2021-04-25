@@ -1,0 +1,315 @@
+diff --git a/Android.bp b/Android.bp
+index 67ac2ab..010a023 100644
+--- a/Android.bp
++++ b/Android.bp
+@@ -20,6 +20,30 @@ cc_library {
+     min_sdk_version: "29",
+ }
+ 
++cc_library {
++    name: "libion_ext",
++    vendor: true,
++    vndk: {
++        enabled: true,
++        extends: "libion",
++        support_system_process: true,
++    },
++    srcs: ["ion.c"],
++    shared_libs: ["liblog"],
++    local_include_dirs: [
++        "include",
++        "kernel-headers",
++    ],
++    export_include_dirs: [
++        "include",
++        "kernel-headers",
++    ],
++    cflags: [
++        "-Werror",
++        "-DLIBION_ROCKCHIP",
++    ],
++}
++
+ cc_binary {
+     name: "iontest",
+     srcs: ["ion_test.c"],
+@@ -28,4 +52,12 @@ cc_binary {
+     cflags: ["-Werror"],
+ }
+ 
++cc_binary {
++    name: "ionlegacytest",
++    srcs: ["ion_legacy_test.c"],
++    static_libs: ["libion"],
++    shared_libs: ["liblog"],
++    cflags: ["-Werror"],
++}
++
+ subdirs = ["tests"]
+diff --git a/include/ion/ion.h b/include/ion/ion.h
+index 1480bd9..88d1a35 100644
+--- a/include/ion/ion.h
++++ b/include/ion/ion.h
+@@ -40,7 +40,11 @@ int ion_map(int fd, ion_user_handle_t handle, size_t length, int prot,
+             int flags, off_t offset, unsigned char **ptr, int *map_fd);
+ int ion_share(int fd, ion_user_handle_t handle, int *share_fd);
+ int ion_import(int fd, int share_fd, ion_user_handle_t *handle);
+-
++#ifdef LIBION_ROCKCHIP
++int ion_get_phys(int fd, ion_user_handle_t handle, unsigned long *phys);
++int ion_secure_alloc(int fd, size_t len, unsigned long *phys);
++int ion_secure_free(int fd, size_t len, unsigned long phys);
++#endif
+ /**
+   * Add 4.12+ kernel ION interfaces here for forward compatibility
+   * This should be needed till the pre-4.12+ ION interfaces are backported.
+diff --git a/ion.c b/ion.c
+index 07b4caf..31f945a 100644
+--- a/ion.c
++++ b/ion.c
+@@ -35,6 +35,10 @@
+ 
+ #include <log/log.h>
+ 
++#ifdef LIBION_ROCKCHIP
++#include <linux/rockchip_ion.h>
++#endif
++
+ #define ION_ABI_VERSION_MODULAR_HEAPS 2
+ 
+ enum ion_version { ION_VERSION_UNKNOWN, ION_VERSION_MODERN, ION_VERSION_LEGACY };
+@@ -71,7 +75,14 @@ int ion_close(int fd) {
+ static int ion_ioctl(int fd, int req, void* arg) {
+     int ret = ioctl(fd, req, arg);
+     if (ret < 0) {
++        if ( ION_IOC_FREE == req )
++        {
++            ALOGW("ION_IOC_FREE failed with code %d: %s; might be caused by that current kernel is NEW.", ret, strerror(errno));
++        }
++        else
++        {
+         ALOGE("ioctl %x failed with code %d: %s", req, ret, strerror(errno));
++        }
+         return -errno;
+     }
+     return ret;
+@@ -209,6 +220,62 @@ int ion_sync_fd(int fd, int handle_fd) {
+     return ion_ioctl(fd, ION_IOC_SYNC, &data);
+ }
+ 
++#ifdef LIBION_ROCKCHIP
++int ion_get_phys(int fd, ion_user_handle_t handle, unsigned long *phys)
++{
++    struct ion_phys_data phys_data;
++    struct ion_custom_data data;
++
++    phys_data.handle = handle;
++    phys_data.phys = 0;
++
++    data.cmd = ION_IOC_GET_PHYS;
++    data.arg = (unsigned long)&phys_data;
++
++    int ret = ion_ioctl(fd, ION_IOC_CUSTOM, &data);
++    if (ret<0)
++        return ret;
++
++    *phys = phys_data.phys;
++
++    return 0;
++}
++
++int ion_secure_free(int fd, size_t len, unsigned long phys)
++{
++    struct ion_phys_data phys_data;
++    struct ion_custom_data data;
++
++    phys_data.handle = 0;
++    phys_data.phys = phys;
++    phys_data.size = len;
++
++    data.cmd = ION_IOC_FREE_SECURE;
++    data.arg = (unsigned long)&phys_data;
++
++    return ion_ioctl(fd, ION_IOC_CUSTOM, &data);
++}
++
++int ion_secure_alloc(int fd, size_t len, unsigned long *phys)
++{
++    struct ion_phys_data phys_data;
++    struct ion_custom_data data;
++
++    phys_data.handle = 0;
++    phys_data.size = len;
++
++    data.cmd = ION_IOC_ALLOC_SECURE;
++    data.arg = (unsigned long)&phys_data;
++
++    int ret = ion_ioctl(fd, ION_IOC_CUSTOM, &data);
++    if (ret<0)
++        return ret;
++
++    *phys = phys_data.phys;
++    return ret;
++}
++#endif
++
+ int ion_query_heap_cnt(int fd, int* cnt) {
+     int ret;
+     struct ion_heap_query query;
+diff --git a/ion_test.c b/ion_test.c
+index f3874ae..5089e48 100644
+--- a/ion_test.c
++++ b/ion_test.c
+@@ -34,7 +34,7 @@ size_t len = 1024*1024, align = 0;
+ int prot = PROT_READ | PROT_WRITE;
+ int map_flags = MAP_SHARED;
+ int alloc_flags = 0;
+-int heap_mask = 1;
++int heap_mask = 2;
+ int test = -1;
+ size_t stride;
+ 
+@@ -46,7 +46,7 @@ int _ion_alloc_test(int *fd, ion_user_handle_t *handle)
+     if (*fd < 0)
+         return *fd;
+ 
+-    ret = ion_alloc(*fd, len, align, heap_mask, alloc_flags, handle);
++    ret = ion_alloc_fd(*fd, len, align, heap_mask, alloc_flags, handle);
+ 
+     if (ret)
+         printf("%s failed: %s\n", __func__, strerror(ret));
+@@ -61,14 +61,59 @@ void ion_alloc_test()
+     if(_ion_alloc_test(&fd, &handle))
+         return;
+ 
+-    ret = ion_free(fd, handle);
++    if (ion_is_legacy(fd)) {
++        ret = ion_free(fd, handle);
++        if (ret) {
++            printf("%s failed: %s %d\n", __func__, strerror(ret), handle);
++            return;
++        }
++    }
++    ion_close(fd);
++    printf("ion alloc test: passed\n");
++}
++
++#ifdef LIBION_ROCKCHIP
++int _ion_secure_alloc_test(int *fd, size_t len, unsigned long *phys)
++{
++    int ret;
++
++    *fd = ion_open();
++    if (*fd < 0)
++        return *fd;
++
++    ret = ion_secure_alloc(*fd, len, phys);
++    if (ret)
++        printf("%s failed: %s\n", __func__, strerror(ret));
++    else
++        printf("%s success: phys = 0x%lx\n", __func__, *phys);
++
++    return ret;
++}
++
++void ion_secure_alloc_test()
++{
++    int fd, ret;
++    unsigned long phys;
++    ion_user_handle_t handle;
++
++    if(_ion_secure_alloc_test(&fd, 4096, &phys))
++        return;
++
++    ret = ion_secure_free(fd, 4096, phys);
+     if (ret) {
+-        printf("%s failed: %s %d\n", __func__, strerror(ret), handle);
++        printf("%s failed: %s 0x%lx\n", __func__, strerror(ret), phys);
+         return;
+     }
++
+     ion_close(fd);
+-    printf("ion alloc test: passed\n");
++    printf("ion secure alloc test: passed\n");
++    return;
+ }
++#else
++void ion_secure_alloc_test() {
++    return;
++}
++#endif
+ 
+ void ion_map_test()
+ {
+@@ -213,7 +258,7 @@ void ion_share_test()
+ int main(int argc, char* argv[]) {
+     int c;
+     enum tests {
+-        ALLOC_TEST = 0, MAP_TEST, SHARE_TEST,
++        ALLOC_TEST = 0, MAP_TEST, SHARE_TEST, SECURE_ALLOC_TEST,
+     };
+ 
+     while (1) {
+@@ -227,9 +272,10 @@ int main(int argc, char* argv[]) {
+             {"align", required_argument, 0, 'g'},
+             {"map_flags", required_argument, 0, 'z'},
+             {"prot", required_argument, 0, 'p'},
++            {"secure_alloc", no_argument, 0, 'e'},
+         };
+         int i = 0;
+-        c = getopt_long(argc, argv, "af:h:l:mr:st", opts, &i);
++        c = getopt_long(argc, argv, "af:h:l:mr:ste", opts, &i);
+         if (c == -1)
+             break;
+ 
+@@ -261,6 +307,9 @@ int main(int argc, char* argv[]) {
+         case 'a':
+             test = ALLOC_TEST;
+             break;
++        case 'e':
++            test = SECURE_ALLOC_TEST;
++            break;
+         case 'm':
+             test = MAP_TEST;
+             break;
+@@ -276,6 +325,9 @@ int main(int argc, char* argv[]) {
+         case ALLOC_TEST:
+             ion_alloc_test();
+             break;
++        case SECURE_ALLOC_TEST:
++            ion_secure_alloc_test();
++            break;
+         case MAP_TEST:
+             ion_map_test();
+             break;
+@@ -283,7 +335,7 @@ int main(int argc, char* argv[]) {
+             ion_share_test();
+             break;
+         default:
+-            printf("must specify a test (alloc, map, share)\n");
++            printf("must specify a test (alloc, map, share, securealloc)\n");
+     }
+     return 0;
+ }
+diff --git a/original-kernel-headers/linux/ion.h b/original-kernel-headers/linux/ion.h
+index f09e7c1..a6a6cf7 100644
+--- a/original-kernel-headers/linux/ion.h
++++ b/original-kernel-headers/linux/ion.h
+@@ -40,6 +40,7 @@ enum ion_heap_type {
+ 	ION_HEAP_TYPE_CARVEOUT,
+ 	ION_HEAP_TYPE_CHUNK,
+ 	ION_HEAP_TYPE_DMA,
++	ION_HEAP_TYPE_SECURE,
+ 	ION_HEAP_TYPE_CUSTOM, /* must be last so device specific heaps always
+ 				 are at the end of this enum */
+ 	ION_NUM_HEAPS = 16,
+@@ -49,7 +50,7 @@ enum ion_heap_type {
+ #define ION_HEAP_SYSTEM_CONTIG_MASK	(1 << ION_HEAP_TYPE_SYSTEM_CONTIG)
+ #define ION_HEAP_CARVEOUT_MASK		(1 << ION_HEAP_TYPE_CARVEOUT)
+ #define ION_HEAP_TYPE_DMA_MASK		(1 << ION_HEAP_TYPE_DMA)
+-
++#define ION_HEAP_TYPE_SECURE_MASK	(1 << ION_HEAP_TYPE_SECURE)
+ #define ION_NUM_HEAP_IDS		sizeof(unsigned int) * 8
+ 
+ /**
+

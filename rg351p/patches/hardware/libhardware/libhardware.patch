@@ -1,0 +1,345 @@
+diff --git a/hardware.c b/hardware.c
+index 6e72ce9f..d353a986 100644
+--- a/hardware.c
++++ b/hardware.c
+@@ -15,6 +15,7 @@
+  */
+ 
+ #include <hardware/hardware.h>
++#include <hardware/gralloc.h>
+ 
+ #include <cutils/properties.h>
+ 
+@@ -247,7 +248,26 @@ found:
+     return load(class_id, path, module);
+ }
+ 
++const static hw_module_t* s_gralloc_module = NULL;
+ int hw_get_module(const char *id, const struct hw_module_t **module)
+ {
+-    return hw_get_module_by_class(id, NULL, module);
++    int ret = 0;
++
++    if ( 0 == strcmp(id, GRALLOC_HARDWARE_MODULE_ID) )
++    {
++        if (NULL != s_gralloc_module )
++        {
++            *module = s_gralloc_module;
++            return 0;
++        }
++    }
++
++    ret = hw_get_module_by_class(id, NULL, module);
++
++    if ( 0 == strcmp(id, GRALLOC_HARDWARE_MODULE_ID) )
++    {
++        s_gralloc_module = *module;
++    }
++
++    return ret;
+ }
+diff --git a/include/hardware/gralloc.h b/include/hardware/gralloc.h
+index 10a153c0..0907fbf2 100644
+--- a/include/hardware/gralloc.h
++++ b/include/hardware/gralloc.h
+@@ -139,6 +139,22 @@ enum {
+      * gralloc modules. */
+     GRALLOC_USAGE_ALLOC_MASK            = ~(GRALLOC_USAGE_FOREIGN_BUFFERS),
+ 
++
++    /* buffer may be used as a cursor */
++    GRALLOC_USAGE_ROT_MASK              = 0x0F000000,
++
++    GRALLOC_USAGE_TO_USE_SINGLE_BUFFER  = 0x0B000000,
++
++    /* mali p010 format */
++    GRALLOC_USAGE_TO_USE_ARM_P010       = 0x0A000000,
++    /* would like to use a fbdc(afbc) format. */
++    GRALLOC_USAGE_TO_USE_FBDC_FMT       = 0x09000000,
++    /* use Physically Continuous memory */
++    GRALLOC_USAGE_TO_USE_PHY_CONT	= 0x08000000,
++    /* replacement of GRALLOC_USAGE_EXTERNAL_DISP,
++     * which is treated as invalid by frameworks. */
++    GRALLOC_USAGE__RK_EXT__EXTERNAL_DISP= 0x07000000U,
++
+     /* implementation-specific private usage flags */
+     GRALLOC_USAGE_PRIVATE_0             = 0x10000000U,
+     GRALLOC_USAGE_PRIVATE_1             = 0x20000000U,
+@@ -147,6 +163,123 @@ enum {
+     GRALLOC_USAGE_PRIVATE_MASK          = 0xF0000000U,
+ };
+ 
++/**
++ * perform operation commands for rk gralloc.
++ * Helpers for using the non-type-safe perform() extension functions. Use
++ * these helpers instead of calling perform() directly in your application.
++ */
++enum {
++  /****************Implement****************/
++  GRALLOC_MODULE_PERFORM_GET_HADNLE_PHY_ADDR       = 0x08100001,
++  GRALLOC_MODULE_PERFORM_GET_HADNLE_PRIME_FD       = 0x08100002,
++  GRALLOC_MODULE_PERFORM_GET_HADNLE_ATTRIBUTES     = 0x08100004,
++  GRALLOC_MODULE_PERFORM_GET_INTERNAL_FORMAT       = 0x08100006,
++  GRALLOC_MODULE_PERFORM_GET_HADNLE_WIDTH          = 0x08100008,
++  GRALLOC_MODULE_PERFORM_GET_HADNLE_HEIGHT         = 0x0810000A,
++  GRALLOC_MODULE_PERFORM_GET_HADNLE_STRIDE         = 0x0810000C,
++  GRALLOC_MODULE_PERFORM_GET_HADNLE_BYTE_STRIDE    = 0x0810000E,
++  GRALLOC_MODULE_PERFORM_GET_HADNLE_FORMAT         = 0x08100010,
++  GRALLOC_MODULE_PERFORM_GET_HADNLE_SIZE           = 0x08100012,
++
++  GRALLOC_MODULE_PERFORM_GET_RK_ASHMEM             = 0x08100014,
++  GRALLOC_MODULE_PERFORM_SET_RK_ASHMEM             = 0x08100016,
++
++  /* perform(const struct gralloc_module_t *mod,
++   *     int op,
++   *     buffer_handle_t buffer,
++   *     int *usage);
++   */
++  GRALLOC_MODULE_PERFORM_GET_USAGE = 0x0feeff03,
++
++
++  /****************Not Implement****************/
++  GRALLOC_MODULE_PERFORM_GET_DRM_FD                = 0x08000002,
++  /* perform(const struct gralloc_module_t *mod,
++   *       int op,
++   *       int drm_fd,
++   *       buffer_handle_t buffer,
++   *       struct hwc_drm_bo *bo);
++   */
++  GRALLOC_MODULE_PERFORM_DRM_IMPORT = 0xffeeff00,
++
++  /* perform(const struct gralloc_module_t *mod,
++   *       int op,
++   *       buffer_handle_t buffer,
++   *       void (*free_callback)(void *),
++   *       void *priv);
++   */
++  GRALLOC_MODULE_PERFORM_SET_IMPORTER_PRIVATE = 0xffeeff01,
++
++  /* perform(const struct gralloc_module_t *mod,
++   *       int op,
++   *       buffer_handle_t buffer,
++   *       void (*free_callback)(void *),
++   *       void **priv);
++   */
++  GRALLOC_MODULE_PERFORM_GET_IMPORTER_PRIVATE = 0xffeeff02,
++};
++
++//eotf type
++enum supported_eotf_type {
++        TRADITIONAL_GAMMA_SDR = 0,
++        TRADITIONAL_GAMMA_HDR,
++        SMPTE_ST2084,  /* HDR10 */
++        HLG,           /* HLG */
++        FUTURE_EOTF
++};
++
++//hdmi_output_colorimetry type
++enum supported_hdmi_colorimetry {
++	COLOR_METRY_NONE=0,
++	COLOR_METRY_ITU_2020=9
++};
++
++struct hdr_static_metadata {
++       uint16_t eotf;
++       uint16_t type;
++       uint16_t display_primaries_x[3];
++       uint16_t display_primaries_y[3];
++       uint16_t white_point_x;
++       uint16_t white_point_y;
++       uint16_t max_mastering_display_luminance;
++       uint16_t min_mastering_display_luminance;
++       uint16_t max_fall;
++       uint16_t max_cll;
++       uint16_t min_cll;
++};
++
++//For Kernel 4.19
++struct hdr_metadata_infoframe {
++      __u8 eotf;
++      __u8 metadata_type;
++      struct {
++         __u16 x, y;
++         } display_primaries[3];
++      struct {
++         __u16 x, y;
++         } white_point;
++      __u16 max_display_mastering_luminance;
++      __u16 min_display_mastering_luminance;
++      __u16 max_cll;
++      __u16 max_fall;
++};
++
++struct hdr_output_metadata {
++    __u32 metadata_type;
++    union {
++        struct hdr_metadata_infoframe hdmi_metadata_type;
++    };
++};
++//End
++
++#define maxLayerNameLength		100
++typedef struct rk_ashmem_t
++{
++    int32_t alreadyStereo;
++    int32_t displayStereo;
++    char LayerName[maxLayerNameLength + 1];
++} rk_ashmem_t;
++
+ /*****************************************************************************/
+ 
+ /**
+@@ -340,7 +473,7 @@ typedef struct gralloc_module_t {
+      */
+     int32_t (*validateBufferSize)(
+             struct gralloc_module_t const* device, buffer_handle_t handle,
+-            uint32_t w, uint32_t h, int32_t format, int usage,
++            uint32_t w, uint32_t h, int32_t format, int usage, int layer_count,
+             uint32_t stride);
+ 
+     /* reserved for future use */
+diff --git a/include/hardware/hardware.h b/include/hardware/hardware.h
+index bf076f6c..8b47d64b 100644
+--- a/include/hardware/hardware.h
++++ b/include/hardware/hardware.h
+@@ -201,6 +201,46 @@ typedef struct hw_device_t {
+ 
+ } hw_device_t;
+ 
++typedef enum {
++
++    /*
++     * sRGB color pixel formats:
++     *
++     * The red, green and blue components are stored in sRGB space, and converted
++     * to linear space when read, using the standard sRGB to linear equation:
++     *
++     * Clinear = Csrgb / 12.92                  for Csrgb <= 0.04045
++     *         = (Csrgb + 0.055 / 1.055)^2.4    for Csrgb >  0.04045
++     *
++     * When written the inverse transformation is performed:
++     *
++     * Csrgb = 12.92 * Clinear                  for Clinear <= 0.0031308
++     *       = 1.055 * Clinear^(1/2.4) - 0.055  for Clinear >  0.0031308
++     *
++     *
++     *  The alpha component, if present, is always stored in linear space and
++     *  is left unmodified when read or written.
++     *
++     */
++    HAL_PIXEL_FORMAT_sRGB_A_8888        = 0xC,
++    HAL_PIXEL_FORMAT_sRGB_X_8888        = 0xD,
++
++    HAL_PIXEL_FORMAT_YCrCb_NV12         = 0x15, // YUY2
++    HAL_PIXEL_FORMAT_YCrCb_NV12_VIDEO   = 0x16,
++    HAL_PIXEL_FORMAT_YCrCb_NV12_10      = 0x17, // YUY2_1obit
++    HAL_PIXEL_FORMAT_YCbCr_422_SP_10    = 0x18, //
++    HAL_PIXEL_FORMAT_YCrCb_420_SP_10    = 0x19, //
++
++    HAL_PIXEL_FORMAT_YUV420_8BIT_I      = 0x1A, // 420I 8bit
++    HAL_PIXEL_FORMAT_YUV420_10BIT_I     = 0x1B, // 420I 10bit
++    HAL_PIXEL_FORMAT_Y210               = 0x1C, // 422I 10bit
++
++    HAL_PIXEL_FORMAT_BPP_1              = 0x30,
++    HAL_PIXEL_FORMAT_BPP_2              = 0x31,
++    HAL_PIXEL_FORMAT_BPP_4              = 0x32,
++    HAL_PIXEL_FORMAT_BPP_8              = 0x33,
++}rk_pixel_format_t;
++
+ #ifdef __cplusplus
+ #define TO_HW_DEVICE_T_OPEN(x) reinterpret_cast<struct hw_device_t**>(x)
+ #else
+diff --git a/include/hardware/hwcomposer.h b/include/hardware/hwcomposer.h
+index 9eb1aafb..7f316d13 100644
+--- a/include/hardware/hwcomposer.h
++++ b/include/hardware/hwcomposer.h
+@@ -178,6 +178,22 @@ typedef struct hwc_layer_1 {
+              * The visible region INCLUDES areas overlapped by a translucent layer.
+              */
+             hwc_region_t visibleRegionScreen;
++    		char LayerName[LayerNameLength + 1];
++			int32_t bufferCount;
++            int32_t bufferUpdate;
++            int32_t bufferChange;
++            int32_t dospecialflag;
++            int32_t alreadyStereo;
++            int32_t displayStereo;
++            int32_t exLeft;
++            int32_t exRight;
++            int32_t exAddrOffset;
++			uint32_t realtransform;
++			#ifdef TARGET_BOARD_PLATFORM_RK312X
++			uint32_t direct_fd;
++			#else
++			uint32_t direct_addr;
++			#endif
+ 
+             /* Sync fence object that will be signaled when the buffer's
+              * contents are available. May be -1 if the contents are already
+@@ -402,6 +418,7 @@ typedef struct hwc_display_contents_1 {
+      * performed by SurfaceFlinger.
+      */
+     uint32_t flags;
++    uint32_t skipflag;
+     size_t numHwLayers;
+     hwc_layer_1_t hwLayers[0];
+ 
+@@ -573,6 +590,12 @@ typedef struct hwc_composer_device_1 {
+     int (*set)(struct hwc_composer_device_1 *dev,
+                 size_t numDisplays, hwc_display_contents_1_t** displays);
+ 
++	int (*fbPost2)(struct hwc_composer_device_1 *dev,size_t numDisplays, hwc_display_contents_1_t** displays);
++	int (*fbPost3)(struct hwc_composer_device_1 *dev,size_t numDisplays, hwc_display_contents_1_t** displays,buffer_handle_t buffer);
++    int (*layer_recover)(struct hwc_composer_device_1 *dev,
++                    size_t numDisplays, hwc_display_contents_1_t** displays);
++	int (*rkCopybit)(struct hwc_composer_device_1 *dev,buffer_handle_t src_handle,
++	                    buffer_handle_t dst_handle,int flag);
+     /*
+      * eventControl(..., event, enabled)
+      * Enables or disables h/w composer events for a display.
+diff --git a/include/hardware/hwcomposer_defs.h b/include/hardware/hwcomposer_defs.h
+index c4d8a44c..17a41738 100644
+--- a/include/hardware/hwcomposer_defs.h
++++ b/include/hardware/hwcomposer_defs.h
+@@ -141,6 +141,11 @@ typedef struct hwc_client_target_property {
+  * Beyond this point are things only used by HWC1, which should be ignored when
+  * implementing a HWC2 device
+  ******************************************************************************/
++#define HWC_BLENDING_DIM		0x0805
++#define HWC_BLENDING_CLEAR_HOLE          0x0806
++
++#define HWC_Layer_DEBUG
++#define LayerNameLength 60
+ 
+ enum {
+     /* hwc_composer_device_t::set failed in EGL */
+@@ -219,7 +224,13 @@ enum {
+        cursor overlay hardware. hwcomposer will also all async position updates
+        of this layer outside of the normal prepare()/set() loop. Added in
+        HWC_DEVICE_API_VERSION_1_4. */
+-    HWC_CURSOR_OVERLAY =  5
++    HWC_CURSOR_OVERLAY =  5,
++    HWC_TOWIN0,
++    HWC_TOWIN1,
++    HWC_LCDC,
++    HWC_NODRAW,
++    HWC_MIX,
++    HWC_MIX_V2
+  };
+ /*
+  * hwc_layer_t::blending values
+diff --git a/include/hardware/power.h b/include/hardware/power.h
+index bd8216ef..360f3cd0 100644
+--- a/include/hardware/power.h
++++ b/include/hardware/power.h
+@@ -65,7 +65,8 @@ typedef enum {
+     POWER_HINT_SUSTAINED_PERFORMANCE = 0x00000006,
+     POWER_HINT_VR_MODE = 0x00000007,
+     POWER_HINT_LAUNCH = 0x00000008,
+-    POWER_HINT_DISABLE_TOUCH = 0x00000009
++    POWER_HINT_DISABLE_TOUCH = 0x00000009,
++    POWER_HINT_PERFORMANCE = 0x0000000A
+ } power_hint_t;
+ 
+ typedef enum {
+

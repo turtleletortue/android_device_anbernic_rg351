@@ -1,0 +1,39 @@
+diff --git a/cc/config/arm_device.go b/cc/config/arm_device.go
+index d37e4862..45a2183a 100644
+--- a/cc/config/arm_device.go
++++ b/cc/config/arm_device.go
+@@ -47,7 +47,7 @@ var (
+ 
+ 	armThumbCflags = []string{
+ 		"-mthumb",
+-		"-Os",
++		"-O3",
+ 	}
+ 
+ 	armClangArchVariantCflags = map[string][]string{
+diff --git a/cc/config/global.go b/cc/config/global.go
+index 473c8067..381e56da 100644
+--- a/cc/config/global.go
++++ b/cc/config/global.go
+@@ -45,7 +45,11 @@ var (
+ 
+ 		"-O2",
+ 		"-g",
+-
++             
++                "-fomit-frame-pointer",
++                "-frename-registers",
++                "-funswitch-loops",		
++		
+ 		"-fno-strict-aliasing",
+ 
+ 		"-Werror=date-time",
+@@ -80,6 +84,7 @@ var (
+ 	}
+ 
+ 	deviceGlobalLdflags = []string{
++		"-Wl,--sort-common",
+ 		"-Wl,-z,noexecstack",
+ 		"-Wl,-z,relro",
+ 		"-Wl,-z,now",
+

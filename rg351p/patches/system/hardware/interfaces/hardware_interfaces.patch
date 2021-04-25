@@ -1,0 +1,22 @@
+diff --git a/suspend/1.0/default/WakeLockEntryList.cpp b/suspend/1.0/default/WakeLockEntryList.cpp
+index 9a58087..f9cbe26 100644
+--- a/suspend/1.0/default/WakeLockEntryList.cpp
++++ b/suspend/1.0/default/WakeLockEntryList.cpp
+@@ -370,10 +370,12 @@ void WakeLockEntryList::updateNow() {
+ }
+ 
+ void WakeLockEntryList::getWakeLockStats(std::vector<WakeLockInfo>* aidl_return) const {
+-    std::lock_guard<std::mutex> lock(mStatsLock);
+-
+-    for (const WakeLockInfo& entry : mStats) {
+-        aidl_return->emplace_back(entry);
++    // Under no circumstances should the lock be held while getting kernel wakelock stats
++    {
++        std::lock_guard<std::mutex> lock(mStatsLock);
++        for (const WakeLockInfo& entry : mStats) {
++            aidl_return->emplace_back(entry);
++        }
+     }
+ 
+     getKernelWakelockStats(aidl_return);
+

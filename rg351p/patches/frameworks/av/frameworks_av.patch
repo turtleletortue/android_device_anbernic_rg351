@@ -1,0 +1,73 @@
+diff --git a/media/libmediaplayerservice/Android.bp b/media/libmediaplayerservice/Android.bp
+index 5301f5c571..d084473f87 100644
+--- a/media/libmediaplayerservice/Android.bp
++++ b/media/libmediaplayerservice/Android.bp
+@@ -10,6 +10,7 @@ cc_library_shared {
+         "StagefrightMetadataRetriever.cpp",
+         "StagefrightRecorder.cpp",
+         "TestPlayerStub.cpp",
++        "RemoteDisplay.cpp",
+     ],
+ 
+     shared_libs: [
+@@ -41,6 +42,7 @@ cc_library_shared {
+         "libstagefright_foundation",
+         "libstagefright_httplive",
+         "libutils",
++        "libstagefright_wfd",
+     ],
+ 
+     header_libs: [
+@@ -59,6 +61,7 @@ cc_library_shared {
+     include_dirs: [
+         "frameworks/av/media/libstagefright/rtsp",
+         "frameworks/av/media/libstagefright/webm",
++        "frameworks/av/media/libstagefright/wifi-display",
+     ],
+ 
+     local_include_dirs: ["include"],
+diff --git a/media/libmediaplayerservice/MediaPlayerService.cpp b/media/libmediaplayerservice/MediaPlayerService.cpp
+index 016f622fb2..ce233d3f95 100644
+--- a/media/libmediaplayerservice/MediaPlayerService.cpp
++++ b/media/libmediaplayerservice/MediaPlayerService.cpp
+@@ -81,7 +81,7 @@
+ 
+ #include "TestPlayerStub.h"
+ #include "nuplayer/NuPlayerDriver.h"
+-
++#include "RemoteDisplay.h"
+ 
+ static const int kDumpLockRetries = 50;
+ static const int kDumpLockSleepUs = 20000;
+@@ -505,12 +505,13 @@ sp<IMediaCodecList> MediaPlayerService::getCodecList() const {
+ }
+ 
+ sp<IRemoteDisplay> MediaPlayerService::listenForRemoteDisplay(
+-        const String16 &/*opPackageName*/,
+-        const sp<IRemoteDisplayClient>& /*client*/,
+-        const String8& /*iface*/) {
+-    ALOGE("listenForRemoteDisplay is no longer supported!");
+-
++    const String16 &opPackageName,
++    const sp<IRemoteDisplayClient>& client, const String8& iface) {
++    if (!checkPermission("android.permission.CONTROL_WIFI_DISPLAY")) {
+     return NULL;
++    }
++
++    return new RemoteDisplay(opPackageName, client, iface.string());
+ }
+ 
+ status_t MediaPlayerService::AudioOutput::dump(int fd, const Vector<String16>& args) const
+diff --git a/media/libstagefright/Android.bp b/media/libstagefright/Android.bp
+index 3bccb7be7a..640191d67d 100644
+--- a/media/libstagefright/Android.bp
++++ b/media/libstagefright/Android.bp
+@@ -241,6 +241,7 @@ cc_library {
+         "RemoteMediaSource.cpp",
+         "SimpleDecodingSource.cpp",
+         "StagefrightMediaScanner.cpp",
++        "SurfaceMediaSource.cpp",
+         "SurfaceUtils.cpp",
+         "ThrottledSource.cpp",
+         "Utils.cpp",
+

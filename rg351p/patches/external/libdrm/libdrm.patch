@@ -1,0 +1,175 @@
+diff --git a/Makefile.am b/Makefile.am
+index 730de1f2..4544fa07 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -90,6 +90,10 @@ if HAVE_ETNAVIV
+ ETNAVIV_SUBDIR = etnaviv
+ endif
+ 
++if HAVE_ROCKCHIP
++ROCKCHIP_SUBDIR = rockchip
++endif
++
+ if BUILD_MANPAGES
+ if HAVE_MANPAGES_STYLESHEET
+ MAN_SUBDIR = man
+@@ -109,6 +113,7 @@ SUBDIRS = \
+ 	$(TEGRA_SUBDIR) \
+ 	$(VC4_SUBDIR) \
+ 	$(ETNAVIV_SUBDIR) \
++	$(ROCKCHIP_SUBDIR) \
+ 	data \
+ 	tests \
+ 	$(MAN_SUBDIR)
+diff --git a/configure.ac b/configure.ac
+index 1cf91347..b9ffcbf1 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -148,6 +148,11 @@ AC_ARG_ENABLE(tegra-experimental-api,
+ 	      [Enable support for Tegra's experimental API (default: disabled)]),
+ 	      [TEGRA=$enableval], [TEGRA=no])
+ 
++AC_ARG_ENABLE(rockchip-experimental-api,
++	      AS_HELP_STRING([--enable-rockchip-experimental-api],
++	      [Enable support for rockchip's experimental API (default: disabled)]),
++	      [ROCKCHIP=$enableval], [ROCKCHIP=no])
++
+ AC_ARG_ENABLE(vc4,
+ 	      AS_HELP_STRING([--disable-vc4],
+ 	      [Enable support for vc4's API (default: auto, enabled on arm)]),
+@@ -455,6 +460,11 @@ else
+ 	AC_DEFINE(HAVE_VC4, 0)
+ fi
+ 
++AM_CONDITIONAL(HAVE_ROCKCHIP, [test "x$ROCKCHIP" = xyes])
++if test "x$ROCKCHIP" = xyes; then
++	AC_DEFINE(HAVE_ROCKCHIP, 1, [Have ROCKCHIP support])
++fi
++
+ AM_CONDITIONAL(HAVE_ETNAVIV, [test "x$ETNAVIV" = xyes])
+ 
+ AM_CONDITIONAL(HAVE_INSTALL_TESTS, [test "x$INSTALL_TESTS" = xyes])
+@@ -569,6 +579,8 @@ AC_CONFIG_FILES([
+ 	vc4/libdrm_vc4.pc
+ 	etnaviv/Makefile
+ 	etnaviv/libdrm_etnaviv.pc
++	rockchip/Makefile
++	rockchip/libdrm_rockchip.pc
+ 	tests/Makefile
+ 	tests/modeprint/Makefile
+ 	tests/modetest/Makefile
+@@ -602,4 +614,5 @@ echo "  Freedreno API  $FREEDRENO (kgsl: $FREEDRENO_KGSL)"
+ echo "  Tegra API      $TEGRA"
+ echo "  VC4 API        $VC4"
+ echo "  Etnaviv API    $ETNAVIV"
++echo "  Rockchip API   $ROCKCHIP"
+ echo ""
+diff --git a/include/drm/drm_fourcc.h b/include/drm/drm_fourcc.h
+index 5c69090d..6f9698c2 100644
+--- a/include/drm/drm_fourcc.h
++++ b/include/drm/drm_fourcc.h
+@@ -231,6 +231,7 @@ extern "C" {
+  * index 1 = Cb:Cr plane, [15:0] Cb:Cr little endian
+  */
+ #define DRM_FORMAT_NV12		fourcc_code('N', 'V', '1', '2') /* 2x2 subsampled Cr:Cb plane */
++#define DRM_FORMAT_NV12_10	fourcc_code('N', 'A', '1', '2') /* 2x2 subsampled Cr:Cb plane */
+ #define DRM_FORMAT_NV21		fourcc_code('N', 'V', '2', '1') /* 2x2 subsampled Cb:Cr plane */
+ #define DRM_FORMAT_NV16		fourcc_code('N', 'V', '1', '6') /* 2x1 subsampled Cr:Cb plane */
+ #define DRM_FORMAT_NV61		fourcc_code('N', 'V', '6', '1') /* 2x1 subsampled Cb:Cr plane */
+diff --git a/include/drm/drm_mode.h b/include/drm/drm_mode.h
+index 5fe6c649..3a78de05 100644
+--- a/include/drm/drm_mode.h
++++ b/include/drm/drm_mode.h
+@@ -204,6 +204,19 @@ extern "C" {
+ 		DRM_MODE_REFLECT_X | \
+ 		DRM_MODE_REFLECT_Y)
+ 
++
++/*
++ * Legacy definitions for old code that doesn't use
++ * the above mask definitions. Don't use in future code.
++ */
++/* rotation property bits */
++#define DRM_ROTATE_0   0
++#define DRM_ROTATE_90  1
++#define DRM_ROTATE_180 2
++#define DRM_ROTATE_270 3
++#define DRM_REFLECT_X  4
++#define DRM_REFLECT_Y  5
++
+ /* Content Protection Flags */
+ #define DRM_MODE_CONTENT_PROTECTION_UNDESIRED	0
+ #define DRM_MODE_CONTENT_PROTECTION_DESIRED     1
+diff --git a/tests/modetest/modetest.c b/tests/modetest/modetest.c
+index e66be660..ca703d03 100644
+--- a/tests/modetest/modetest.c
++++ b/tests/modetest/modetest.c
+@@ -623,6 +623,7 @@ static struct resources *get_resources(struct device *dev)
+ 		return NULL;
+ 
+ 	drmSetClientCap(dev->fd, DRM_CLIENT_CAP_UNIVERSAL_PLANES, 1);
++	drmSetClientCap(dev->fd, DRM_CLIENT_CAP_ATOMIC, 1);
+ 
+ 	res->res = drmModeGetResources(dev->fd);
+ 	if (!res->res) {
+diff --git a/xf86drmMode.c b/xf86drmMode.c
+index 207d7be9..fe576539 100644
+--- a/xf86drmMode.c
++++ b/xf86drmMode.c
+@@ -305,6 +305,31 @@ drm_public int drmModeAddFB2(int fd, uint32_t width, uint32_t height,
+ 					  buf_id, flags);
+ }
+ 
++int drmModeAddFB2_ext(int fd, uint32_t width, uint32_t height,
++                 uint32_t pixel_format, uint32_t bo_handles[4],
++                 uint32_t pitches[4], uint32_t offsets[4], __u64 modifier[4],
++                 uint32_t *buf_id, uint32_t flags)
++{
++       struct drm_mode_fb_cmd2 f;
++       int ret;
++       int i;
++
++       f.width  = width;
++       f.height = height;
++       f.pixel_format = pixel_format;
++       f.flags = flags;
++       memcpy(f.handles, bo_handles, 4 * sizeof(bo_handles[0]));
++       memcpy(f.pitches, pitches, 4 * sizeof(pitches[0]));
++       memcpy(f.offsets, offsets, 4 * sizeof(offsets[0]));
++       memcpy(f.modifier, modifier, 4 * sizeof(modifier[0]));
++
++       if ((ret = DRM_IOCTL(fd, DRM_IOCTL_MODE_ADDFB2, &f)))
++               return ret;
++
++       *buf_id = f.fb_id;
++       return 0;
++}
++
+ drm_public int drmModeRmFB(int fd, uint32_t bufferId)
+ {
+ 	return DRM_IOCTL(fd, DRM_IOCTL_MODE_RMFB, &bufferId);
+diff --git a/xf86drmMode.h b/xf86drmMode.h
+index a32902f7..b16b51ac 100644
+--- a/xf86drmMode.h
++++ b/xf86drmMode.h
+@@ -166,6 +166,7 @@ extern "C" {
+ #define DRM_MODE_PROP_IMMUTABLE (1<<2)
+ #define DRM_MODE_PROP_ENUM      (1<<3) /* enumerated type with text strings */
+ #define DRM_MODE_PROP_BLOB      (1<<4)
++#define DRM_MODE_PROP_BITMASK	(1<<5) /* bitmask of enumerated types */
+ 
+ #define DRM_MODE_CURSOR_BO      (1<<0)
+ #define DRM_MODE_CURSOR_MOVE    (1<<1)
+@@ -380,6 +381,11 @@ int drmModeAddFB2WithModifiers(int fd, uint32_t width, uint32_t height,
+ 			       const uint64_t modifier[4], uint32_t *buf_id,
+ 				   uint32_t flags);
+ 
++extern int drmModeAddFB2_ext(int fd, uint32_t width, uint32_t height,
++                        uint32_t pixel_format, uint32_t bo_handles[4],
++                        uint32_t pitches[4], uint32_t offsets[4], __u64 modifier[4],
++                        uint32_t *buf_id, uint32_t flags);
++
+ /**
+  * Destroies the given framebuffer.
+  */
+

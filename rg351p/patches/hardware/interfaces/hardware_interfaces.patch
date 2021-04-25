@@ -1,0 +1,14 @@
+diff --git a/graphics/mapper/2.1/utils/passthrough/include/mapper-passthrough/2.1/Gralloc0Hal.h b/graphics/mapper/2.1/utils/passthrough/include/mapper-passthrough/2.1/Gralloc0Hal.h
+index 13df3bcbc..e7dce11be 100644
+--- a/graphics/mapper/2.1/utils/passthrough/include/mapper-passthrough/2.1/Gralloc0Hal.h
++++ b/graphics/mapper/2.1/utils/passthrough/include/mapper-passthrough/2.1/Gralloc0Hal.h
+@@ -48,7 +48,7 @@ class Gralloc0HalImpl : public V2_0::passthrough::detail::Gralloc0HalImpl<Hal> {
+          int32_t ret = mModule->validateBufferSize(
+                  mModule, bufferHandle, descriptorInfo.width, descriptorInfo.height,
+                  static_cast<int32_t>(descriptorInfo.format),
+-                 static_cast<uint64_t>(descriptorInfo.usage), stride);
++                 static_cast<uint64_t>(descriptorInfo.usage), descriptorInfo.layerCount, stride);
+          if (ret == -EINVAL) {
+              return Error::BAD_BUFFER;
+          } else if (ret < 0) {
+

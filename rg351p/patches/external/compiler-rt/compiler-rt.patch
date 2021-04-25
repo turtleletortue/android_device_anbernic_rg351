@@ -1,0 +1,15 @@
+diff --git a/lib/cfi/cfi_blacklist.txt b/lib/cfi/cfi_blacklist.txt
+index 644b07866..5034104b2 100644
+--- a/lib/cfi/cfi_blacklist.txt
++++ b/lib/cfi/cfi_blacklist.txt
+@@ -27,3 +27,10 @@ src:*xstddef
+ 
+ # b/119127110
+ fun:*internal_default_instance*
++
++src:*wpa_supplicant/driver_i.h
++src:*wpa_supplicant/*
++src:*hostapd/*
++src:*wpa_supplicant/hostapd/*
++src:*wpa_supplicant/src/*
++src:*wpa_supplicant_8_lib/*

@@ -44,7 +44,7 @@ WIFI_DRIVER_MODULE_ARG  := "ifname=wlan0 if2name=p2p0"
 # BT configs
 BOARD_HAVE_BLUETOOTH := true
 BOARD_HAVE_BLUETOOTH_LINUX := true
-BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/hardkernel/common/bluetooth
+BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/anbernic/common/bluetooth
 
 TARGET_NO_BOOTLOADER := true
 TARGET_NO_KERNEL := false
@@ -69,8 +69,8 @@ BOARD_KERNEL_IMAGE_NAME = Image
 #TARGET_USES_UNCOMPRESSED_KERNEL := true
 #BOARD_DTB_OFFSET 	:= 0x01f00000
 #BOARD_KERNEL_CMDLINE 	:= root=/dev/mmcblk0p2 skip_initramfs rootfstype=ext4 rootwait init=/init fbcon=rotate:3 consoleblank=0
-#TARGET_PREBUILT_KERNEL := device/hardkernel/common/kernel/Image
-#TARGET_PREBUILT_DTB := device/hardkernel/odroidgo2/kernel/rk3326-odroidgo2-linux-v11.dtb
+#TARGET_PREBUILT_KERNEL := device/anbernic/common/kernel/Image
+#TARGET_PREBUILT_DTB := device/anbernic/odroidgo2/kernel/rk3326-odroidgo2-linux-v11.dtb
 #BOARD_BOOTIMG_HEADER_VERSION := 1
 #BOARD_HEADER_SIZE := 1580
 #BOARD_RECOVERY_MKBOOTIMG_ARGS := --header_version 1
@@ -109,7 +109,7 @@ TARGET_USERIMAGES_SPARSE_EXT_DISABLED := true
 
 # Recovery
 TARGET_NO_RECOVERY := false
-TARGET_RECOVERY_FSTAB    := device/hardkernel/common/recovery.fstab
+TARGET_RECOVERY_FSTAB    := device/anbernic/common/recovery.fstab
 #BOARD_RECOVERYIMAGE_PARTITION_SIZE := $(shell echo $$((200*1024*1024))) # 200M
 BOARD_BOOTIMAGE_PARTITION_SIZE := 67108864
 TARGET_RECOVERY_PIXEL_FORMAT := BGRA_8888
@@ -119,15 +119,15 @@ TARGET_RECOVERY_UI_SCREEN_WIDTH ?= 480
 
 ifneq ($(TARGET_NO_RECOVERY),true)
 PRODUCT_COPY_FILES += \
-	device/hardkernel/common/init.recovery.common.rc:recovery/root/init.recovery.rk3326.rc
+	device/anbernic/common/init.recovery.common.rc:recovery/root/init.recovery.rk3326.rc
 endif
 
 # APEX
 DEXPREOPT_GENERATE_APEX_IMAGE := true
 
 # HIDL
-DEVICE_MANIFEST_FILE := device/hardkernel/common/manifest.xml
-DEVICE_MATRIX_FILE := device/hardkernel/common/compatibility_matrix.xml
+DEVICE_MANIFEST_FILE := device/anbernic/common/manifest.xml
+DEVICE_MATRIX_FILE := device/anbernic/common/compatibility_matrix.xml
 
 # Sepolicy
 #BOARD_SEPOLICY_DIRS := $(DEVICE_PATH)/sepolicy

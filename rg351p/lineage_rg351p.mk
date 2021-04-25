@@ -13,30 +13,30 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-include device/hardkernel/common/BoardConfig.mk
+include device/anbernic/common/BoardConfig.mk
 
 # Inherit from hardware-specific part of the product configuration
-$(call inherit-product, device/hardkernel/common/device.mk)
+$(call inherit-product, device/anbernic/common/device.mk)
 
 # Boot animation
-TARGET_SCREEN_HEIGHT := 854
-TARGET_SCREEN_WIDTH := 480
+TARGET_SCREEN_HEIGHT := 480
+TARGET_SCREEN_WIDTH := 320
 
-PRODUCT_NAME := lineage_odroidgo3
-PRODUCT_DEVICE := odroidgo3
-PRODUCT_MANUFACTURER := HardKernel Co., Ltd.
-PRODUCT_BRAND := ODROID
-PRODUCT_MODEL := LineageOS for Odroid GoS
+PRODUCT_NAME := lineage_rg351p
+PRODUCT_DEVICE := rg351p
+PRODUCT_MANUFACTURER := Anbernic
+PRODUCT_BRAND := Anbernic
+PRODUCT_MODEL := LineageOS for Anbernic RG351P
 
 
 PRODUCT_GMS_CLIENTID_BASE := android-rockchip
 
 PRODUCT_BUILD_PROP_OVERRIDES += \
-	TARGET_DEVICE="odroidgo3" \
-	PRODUCT_NAME="odroidgo3" \
-        PRIVATE_BUILD_DESC="ryu-user 8.1.0 OPM1.171019.016 4503492 release-keys"
+	TARGET_DEVICE="rg351p" \
+	PRODUCT_NAME="rg351p" \
+	PRIVATE_BUILD_DESC="lineage_rg351p-userdebug 11 RP1A.201005.004 test-keys"
 
 # Set BUILD_FINGERPRINT variable to be picked up by both system and vendor build.prop
-BUILD_FINGERPRINT := "google/ryu/dragon:8.1.0/OPM1.171019.016/4503492:user/release-keys"
+BUILD_FINGERPRINT := google/ryu/dragon:8.1.0/OPM1.171019.016/4503492:user/release-keys
 
 TARGET_VENDOR := rockchip

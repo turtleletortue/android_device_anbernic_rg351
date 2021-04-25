@@ -15,8 +15,9 @@
 #
 
 PRODUCT_MAKEFILES := \
-	$(LOCAL_DIR)/lineage_odroidgo3.mk
+	$(LOCAL_DIR)/lineage_rg351p.mk
 
 COMMON_LUNCH_CHOICES := \
-	lineage_odroidgo3-user \
-	lineage_odroidgo3-userdebug 
+	lineage_rg351p-user \
+	lineage_rg351p-userdebug \
+	lineage_rg351p-eng

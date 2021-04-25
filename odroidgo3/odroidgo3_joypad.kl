@@ -1,8 +1,0 @@
-# Left Analog Stick
-axis 0x00    X flat 32
-axis 0x01    Y flat 32
-
-# Right Analog Stick
-axis 0x10 RX flat 32
-axis 0x11 RY flat 32
-

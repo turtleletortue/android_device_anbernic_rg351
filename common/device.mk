@@ -53,11 +53,11 @@ PRODUCT_AAPT_PREBUILT_DPI := normal ldpi mdpi
 
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += \
-    	device/hardkernel/common/overlay \
-    	device/hardkernel/common/overlay-lineage
+    	device/anbernic/common/overlay \
+    	device/anbernic/common/overlay-lineage
 
 # Soong namespaces
-PRODUCT_SOONG_NAMESPACES := device/hardkernel/common 
+PRODUCT_SOONG_NAMESPACES := device/anbernic/common 
 
 # 4 apps in the background
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -264,8 +264,8 @@ PRODUCT_PACKAGES += \
     android.hardware.graphics.allocator@4.0-service
 
 DEVICE_MANIFEST_FILE += \
-    device/hardkernel/common/manifests/android.hardware.graphics.mapper@4.0.xml \
-    device/hardkernel/common/manifests/android.hardware.graphics.allocator@4.0.xml
+    device/anbernic/common/manifests/android.hardware.graphics.mapper@4.0.xml \
+    device/anbernic/common/manifests/android.hardware.graphics.allocator@4.0.xml
 else
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.vendor.mpp_buf_type=1
@@ -276,8 +276,8 @@ PRODUCT_PACKAGES += \
     android.hardware.graphics.allocator@2.0-service
 
 DEVICE_MANIFEST_FILE += \
-    device/hardkernel/common/manifests/android.hardware.graphics.mapper@2.1.xml \
-    device/hardkernel/common/manifests/android.hardware.graphics.allocator@2.0.xml
+    device/anbernic/common/manifests/android.hardware.graphics.mapper@2.1.xml \
+    device/anbernic/common/manifests/android.hardware.graphics.allocator@2.0.xml
 endif
 
 PRODUCT_PACKAGES += \

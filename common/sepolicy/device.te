@@ -1,0 +1,5 @@
+type dri_device, dev_type, mlstrustedobject;
+type rfkill_device, dev_type, mlstrustedobject;
+type sw_sync_device, dev_type;
+type hidraw_device, dev_type;
+type persist_block_device, dev_type;

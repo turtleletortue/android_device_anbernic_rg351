@@ -1,0 +1,73 @@
+/dev/ttyS*                0666   system     system
+/dev/galcore              0666   system     graphics
+/dev/graphics/fb0         0666   system     graphics
+/dev/fb0                  0666   system     graphics
+/dev/vpu                  0660   system     system
+/dev/vpu_service          0666   media      media
+/dev/mpp_service          0666   media      media
+/dev/vpu-service          0666   media      media
+/dev/hevc_service         0666   media      media
+/dev/hevc-service         0666   media      media
+/dev/rkvdec               0666   media      media
+/dev/vpu_mem              0666   system     system
+/dev/rk29-ipp             0666   system     system   
+/dev/rga                  0666   system     system
+/dev/video_state          0666   system     system
+/dev/sys_state            0660   system     system
+/dev/iep                  0666   media      media
+/dev/vepu                 0666   system     system
+/dev/h265e                0666   system     system
+/dev/avsd                 0666   system     system
+
+/dev/ion                  0666   system     system
+/dev/ion_legency          0666   system     system
+/dev/ion_legacy          0666   system     system
+/dev/video*               0660   cameraserver  system     
+/dev/media*               0660   system     camera
+/dev/v4l-subdev*          0660   system     camera
+
+/dev/dma_heap/system	   0666 system graphics
+/dev/dma_heap/linux,cma   0666 system graphics
+
+/dev/hw_random		0440   root   system
+
+# for bluetooth nodes
+/dev/rfkill               0660  bluetooth     wifi
+/dev/uhid                 0660  bluetooth     bluetooth
+
+# BT Realtek
+/dev/rtk_btusb             0660   bluetooth   bluetooth
+
+# Kmsg device
+/dev/kmsg                 0620   root       system
+
+/dev/block/platform/soc/ff3770000.dwmmc/by-name/vendor     0600    system       system
+/dev/block/platform/soc/ff3770000.dwmmc/by-name/userdata   0600    system       system
+
+#for hid audio
+/dev/hidraw0              0660   audio  audio
+
+# for radio
+/dev/ttyUSB*              0660   radio		radio
+
+# for mali
+/dev/mali*           	  0666   system   	 graphics
+/dev/ump            	  0666   system   	 system
+/dev/vpu-enc    	0600    media   media
+/dev/vpu-dec    	0660    media   graphics
+
+# gpu
+/dev/sw_sync            0660   system     graphics
+
+#for ddr freq
+/dev/ddr_freq        0664        system        graphics
+
+/sys/devices/platform/ddr_devfreq/devfreq/ddr_devfreq	min_freq	0644	system	system
+/sys/devices/platform/ff400000.gpu/devfreq/ff400000.gpu	min_freq	0644	system	system
+
+/dev/cpu_state 0666 system system
+/dev/chip_state 0666 system system
+
+#common char device files
+/dev/iio:device* 0666 system system
+/dev/input/event* 0666 system system

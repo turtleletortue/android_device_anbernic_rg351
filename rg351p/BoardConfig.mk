@@ -1,4 +1,4 @@
-PLATFORM_PATH := device/hardkernel/odroidgo2
+PLATFORM_PATH := device/anbernic/rg351p
 
 
 TARGET_SCREEN_DENSITY 		:= 120

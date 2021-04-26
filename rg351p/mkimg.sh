@@ -2,9 +2,9 @@
 
 LINEAGEVERSION=lineage-18.1
 DATE=`date +%Y%m%d`
-IMGNAME=$LINEAGEVERSION-$DATE-odroidgo2.img
+IMGNAME=$LINEAGEVERSION-$DATE-rg351p.img
 IMGSIZE=7
-OUTDIR=${ANDROID_PRODUCT_OUT:="../../../out/target/product/odroidgo2"}
+OUTDIR=${ANDROID_PRODUCT_OUT:="../../../out/target/product/rg351p"}
 
 if [ `id -u` != 0 ]; then
 	echo "Must be root to run script!"

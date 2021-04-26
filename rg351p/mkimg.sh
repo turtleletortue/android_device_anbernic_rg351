@@ -70,8 +70,6 @@ else
 	mount /dev/mapper/${LOOPDEV}p1 sdcard/BOOT
 	sync
 	cp BOOT/* sdcard/BOOT
-
-	fi
 	sync
 	umount /dev/mapper/${LOOPDEV}p1
 	rm -rf sdcard

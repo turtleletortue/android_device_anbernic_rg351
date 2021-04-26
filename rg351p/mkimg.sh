@@ -24,12 +24,12 @@ else
 	echo p
 	echo 1
 	echo
-	echo +3072M
+	echo +256M
 	echo n
 	echo p
 	echo 2
 	echo
-	echo +1536M
+	echo +2000M
 	echo n
 	echo p
 	echo 3

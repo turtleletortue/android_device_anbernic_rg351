@@ -18,6 +18,9 @@ include device/anbernic/common/BoardConfig.mk
 # Inherit from hardware-specific part of the product configuration
 $(call inherit-product, device/anbernic/common/device.mk)
 
+# Inherit from device-specific part of the product configuration
+$(call inherit-product, device/anbernic/rg351p/device.mk)
+
 # Boot animation
 TARGET_SCREEN_HEIGHT := 480
 TARGET_SCREEN_WIDTH := 320

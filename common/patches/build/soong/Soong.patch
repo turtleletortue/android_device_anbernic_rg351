@@ -1,3 +1,4 @@
+project build/soong/
 diff --git a/cc/config/arm_device.go b/cc/config/arm_device.go
 index d37e4862..45a2183a 100644
 --- a/cc/config/arm_device.go
@@ -36,4 +37,26 @@ index 473c8067..381e56da 100644
  		"-Wl,-z,noexecstack",
  		"-Wl,-z,relro",
  		"-Wl,-z,now",
+diff --git a/cc/prebuilt.go b/cc/prebuilt.go
+index b7c0bf2f..9c4602e4 100644
+--- a/cc/prebuilt.go
++++ b/cc/prebuilt.go
+@@ -27,7 +27,7 @@ func RegisterPrebuiltBuildComponents(ctx android.RegistrationContext) {
+ 	ctx.RegisterModuleType("cc_prebuilt_library_shared", PrebuiltSharedLibraryFactory)
+ 	ctx.RegisterModuleType("cc_prebuilt_library_static", PrebuiltStaticLibraryFactory)
+ 	ctx.RegisterModuleType("cc_prebuilt_object", prebuiltObjectFactory)
+-	ctx.RegisterModuleType("cc_prebuilt_binary", prebuiltBinaryFactory)
++	ctx.RegisterModuleType("cc_prebuilt_binary", PrebuiltBinaryFactory)
+ }
+ 
+ type prebuiltLinkerInterface interface {
+@@ -316,7 +316,7 @@ func (p *prebuiltBinaryLinker) binary() bool {
+ 
+ // cc_prebuilt_binary installs a precompiled executable in srcs property in the
+ // device's directory.
+-func prebuiltBinaryFactory() android.Module {
++func PrebuiltBinaryFactory() android.Module {
+ 	module, _ := NewPrebuiltBinary(android.HostAndDeviceSupported)
+ 	return module.Init()
+ }
 

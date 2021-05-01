@@ -496,6 +496,15 @@ PRODUCT_PACKAGES += \
     	akmd \
     	libion_ext \
 
+# libvpu
+PRODUCT_PACKAGES += \
+    libffmpeg_58 \
+    libiconv \
+    libjpeghwenc \
+    libmpp \
+    librk_vpuapi \
+    librtopus \
+
 PRODUCT_PROPERTY_OVERRIDES += \
 	config.disable_rtt=true \
 	config.disable_bluetooth=false \

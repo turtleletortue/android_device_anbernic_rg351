@@ -1,0 +1,10 @@
+cc_prebuilt_library_shared {
+    name: "libffmpeg_58",
+    compile_multilib: "32",
+    strip: {
+        none: true,
+    },
+    srcs: ["libffmpeg_58.so"],
+   shared_libs: ["libc", "libcrypto", "libdl", "libiconv", "liblog", "libm", "librtopus", "libssl", "libz"],
+    check_elf_files: false,
+}

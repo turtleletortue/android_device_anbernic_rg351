@@ -22,8 +22,8 @@
 #
 
   	    	    	
-#PRODUCT_COPY_FILES += \
-#    	$(LOCAL_PATH)/odroidgo2_joypad.kl:$(TARGET_COPY_OUT_VENDOR)/usr/keylayout/odroidgo2_joypad.kl \
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/Vendor_1209_Product_3100.kl:$(TARGET_COPY_OUT_VENDOR)/usr/keylayout/Vendor_1209_Product_3100.kl \
 
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     ro.surface_flinger.primary_display_orientation=ORIENTATION_270 \

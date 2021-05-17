@@ -1,9 +1,7 @@
 # Remove 351Droid bootanimation
 cd ../../../../vendor/lineage
-cd bootanimation
-rm 351droid.zip
-cd ..
 git reset --hard
+git clean -f -d
 
 cd ../../build/soong
 git reset --hard

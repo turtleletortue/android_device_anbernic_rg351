@@ -2,7 +2,8 @@
 
 LINEAGEVERSION=lineage-18.1
 DATE=`date +%Y%m%d`
-IMGNAME=$LINEAGEVERSION-$DATE-rg351v.img
+DEVICE=rg351v
+IMGNAME=$LINEAGEVERSION-$DATE-$DEVICE.img
 IMGSIZE=7
 OUTDIR=${ANDROID_PRODUCT_OUT:="../../../out/target/product/rg351v"}
 
@@ -14,6 +15,9 @@ fi
 if [ -f $IMGNAME ]; then
 	echo "File $IMGNAME already exists!"
 else
+    echo "Copying over kernel files"
+    cp $OUTDIR/obj/KERNEL_OBJ/arch/arm64/boot/Image BOOT/
+    cp $OUTDIR/obj/KERNEL_OBJ/arch/arm64/boot/dts/rockchip/rk3326-$DEVICE.dtb BOOT/
 	echo "Creating image file $IMGNAME..."
 	dd if=/dev/zero of=$IMGNAME bs=1M count=$(echo "$IMGSIZE*1024" | bc)
 	sync
@@ -76,4 +80,7 @@ else
 	kpartx -d $IMGNAME
 	sync
 	echo "Done, created $IMGNAME!"
+    echo "Cleanup..."
+    rm BOOT/Image
+    rm BOOT/*.dtb
 fi

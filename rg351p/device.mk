@@ -28,3 +28,5 @@ PRODUCT_COPY_FILES += \
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     ro.surface_flinger.primary_display_orientation=ORIENTATION_270 \
 
+DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
+

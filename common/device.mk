@@ -385,6 +385,10 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/wifi/mt7610:$(TARGET_COPY_OUT_VENDOR)/etc/modprobe.d/mt7610 \
     $(LOCAL_PATH)/configs/wifi/RT2870STA.dat:$(TARGET_COPY_OUT_SYSTEM)/etc/Wireless/RT2870STA/RT2870STA.dat
 	    
+# Copy device kcm
+PRODUCT_COPY_FILES += \
+        $(LOCAL_PATH)/Vendor_1209_Product_3100.kcm:$(TARGET_COPY_OUT_VENDOR)/usr/keychars/Vendor_1209_Product_3100.kcm 
+
 # Build and run only ART
 PRODUCT_RUNTIMES := runtime_libart_default
 

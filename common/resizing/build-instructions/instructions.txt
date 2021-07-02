@@ -1,0 +1,21 @@
+Use buildroot-2021.02.1 with that resizing_defconfig
+Make rootfs with buildroot
+Cross compile util-linux (specifically fdisk tool) statically using the toolchain created by buildroot
+Ex:
+
+Add the buildroot toolchain to path then run 
+./configure --verbose --host=aarch64-linux --target=aarch64-linux --disable-shared --without-tinfo --without-ncurses --disable-ipv6 
+export CFLAGS=-static
+export SUID_CFLAGS=-static
+export SUID_LDFLAGS=-static
+export CPPFLAGS=-static
+export LDFLAGS=-static
+make LDFLAGS="--static" -j15 fdisk
+
+Fdisk in prebuilt ramdisk is from util-linux commit 5ec1108c0022a156bf6d796e3d50243bbaff75a5
+
+Replace the fdisk in rootfs with the statically built from source one (the one included in buildroot works differently than the standard fdisk and breaks commands)
+
+Add in the linuxrc from this folder into the rootfs, and make a symlink to it called init (you could also just name it init, but I prefer having it linuxrc)
+Add resized and resizing images in ppm format (can be made using GIMP)
+Also, download armv8 prebuilt busybox from busybox website so that the command for the splash screens works

@@ -4,7 +4,7 @@ LINEAGEVERSION=lineage-18.1
 DATE=`date +%Y%m%d`
 DEVICE=rg351p
 IMGNAME=$LINEAGEVERSION-$DATE-$DEVICE.img
-IMGSIZE=7
+IMGSIZE=3
 OUTDIR=${ANDROID_PRODUCT_OUT:="../../../out/target/product/rg351p"}
 
 if [ `id -u` != 0 ]; then
@@ -16,6 +16,7 @@ if [ -f $IMGNAME ]; then
 	echo "File $IMGNAME already exists!"
 else
     echo "Copying over kernel files"
+    cp ../common/resizing/prebuilt/Image-resizing BOOT/
     cp $OUTDIR/obj/KERNEL_OBJ/arch/arm64/boot/Image BOOT/
     cp $OUTDIR/obj/KERNEL_OBJ/arch/arm64/boot/dts/rockchip/rk3326-$DEVICE.dtb BOOT/
 	echo "Creating image file $IMGNAME..."
@@ -39,8 +40,6 @@ else
 	echo 3
 	echo
 	echo +256M
-	echo n
-	echo p
 	echo
 	echo
 	echo t
@@ -63,7 +62,6 @@ else
 	mkfs.fat -F 32 /dev/mapper/${LOOPDEV}p1 -n BOOT
 	mkfs.ext4 /dev/mapper/${LOOPDEV}p2 -L system
 	mkfs.ext4 /dev/mapper/${LOOPDEV}p3 -L vendor
-	mkfs.f2fs /dev/mapper/${LOOPDEV}p4 -l userdata
 	echo "Copying system..."
 	dd if=$OUTDIR/system.img of=/dev/mapper/${LOOPDEV}p2 bs=1M
 	echo "Copying vendor..."
@@ -81,6 +79,6 @@ else
 	sync
 	echo "Done, created $IMGNAME!"
     echo "Cleanup..."
-    rm BOOT/Image
+    rm BOOT/Image*
     rm BOOT/*.dtb
 fi

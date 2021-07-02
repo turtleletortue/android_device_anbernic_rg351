@@ -1,0 +1,123 @@
+#!/bin/sh
+
+export PATH=/usr/bin:/bin:/usr/sbin:/sbin
+/bin/busybox --install -s
+
+/bin/busybox mount -t proc /proc /proc
+/bin/busybox mount -t sysfs none /sys
+
+echo /sbin/mdev >/proc/sys/kernel/hotplug
+mdev -s
+
+for _ in $(seq 1 100); do
+	[ -e "/dev/fb0" ] && break
+	/bin/busybox sleep 0.1
+done
+
+[ -e "/sys/class/graphics/fb0/modes" ] || return
+[ -z "$(cat /sys/class/graphics/fb0/mode)" ] || return
+
+_mode="$(cat /sys/class/graphics/fb0/modes)"
+echo "Setting framebuffer mode to: $_mode"
+echo "$_mode" > /sys/class/graphics/fb0/mode
+
+mount -t auto -v /dev/mmcblk0p1 /mnt
+
+[ -f /mnt/rk3326-rg351p.dtb ] && DEVICE=1
+[ -f /mnt/rk3326-rg351v.dtb ] && DEVICE=2
+
+if [ $DEVICE = 1 ]; then
+    cp /resizing.ppm /tmp/resizing.ppm
+fi
+
+if [ $DEVICE = 2 ]; then
+    cp /resizingv.ppm /tmp/resizing.ppm
+fi
+
+/sbin/busybox-armv8l fbsplash -s /tmp/resizing.ppm
+
+umount /dev/mmcblk0p*
+
+busybox sleep 1
+
+fsck /dev/mmcblk0p2
+busybox sleep 1
+fsck /dev/mmcblk0p3
+
+busybox sleep 1
+
+echo "Fdisk Stage"
+(
+echo
+echo n
+echo p
+echo
+echo
+echo
+echo
+echo w
+) | fdisk /dev/mmcblk0
+
+busybox sleep 1
+
+sync
+partprobe /dev/mmcblk0
+partprobe
+busybox sleep 1
+sync
+
+sleep 4
+
+echo "Resizing starting"
+#resize.f2fs /dev/mmcblk0p4
+mke2fs -t ext4 /dev/mmcblk0p4
+sync
+
+sleep 4
+#fsck.f2fs /dev/mmcblk0p4
+sleep 1
+
+mkdir /mnt
+mount -t auto -v /dev/mmcblk0p1 /mnt
+sync
+
+echo "Switching to Android Boot"
+mv /mnt/boot.ini /mnt/boot.ini-resize
+cp /mnt/boot.ini-android /mnt/boot.ini
+
+if [ $DEVICE = 1 ]; then
+    cp /resized.ppm /tmp/resized.ppm
+fi
+
+if [ $DEVICE = 2 ]; then
+    cp /resizedv.ppm /tmp/resized.ppm
+fi
+
+/sbin/busybox-armv8l fbsplash -s /tmp/resized.ppm
+
+sleep 5
+umount /mnt
+umount /proc
+umount /sys
+
+busybox reboot
+
+busybox reboot -f
+
+reboot
+
+reboot -f
+
+echo "Didn't reboot????"
+
+echo /sbin/mdev >/proc/sys/kernel/hotplug
+mdev -s
+
+mount -t auto -v /dev/mmcblk0p1 /mnt
+sync
+echo "Failed to reboot, init will end and kernel will panic." > /mnt/rebootfailed.log
+sync
+umount /mnt
+sleep 4
+echo "End"
+

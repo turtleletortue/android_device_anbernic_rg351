@@ -21,6 +21,8 @@ regulator dev vcc_backlight
 regulator disable
 regulator dev vcc_lcd
 regulator disable  
+
+gpio toggle a5
   
 setenv bootrootfs "root=/dev/mmcblk0p2 skip_initramfs fw_devlink=permissive rootfstype=ext4 rootwait init=/init consoleblank=0 swiotlb=1 coherent_pool=1m"
 

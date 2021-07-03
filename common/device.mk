@@ -383,6 +383,7 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/wifi/8821cu:$(TARGET_COPY_OUT_VENDOR)/etc/modprobe.d/8821cu \
     $(LOCAL_PATH)/configs/wifi/rt2800usb:$(TARGET_COPY_OUT_VENDOR)/etc/modprobe.d/rt2800usb \
     $(LOCAL_PATH)/configs/wifi/mt7610:$(TARGET_COPY_OUT_VENDOR)/etc/modprobe.d/mt7610 \
+    $(LOCAL_PATH)/configs/wifi/mt7601:$(TARGET_COPY_OUT_VENDOR)/etc/modprobe.d/mt7601 \
     $(LOCAL_PATH)/configs/wifi/RT2870STA.dat:$(TARGET_COPY_OUT_SYSTEM)/etc/Wireless/RT2870STA/RT2870STA.dat
 	    
 # Copy device kcm

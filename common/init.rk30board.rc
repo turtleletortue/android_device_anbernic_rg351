@@ -56,8 +56,6 @@ on fs
     start hwservicemanager
     
     mount_all /fstab.rk30board --early
-
-    exec /system/bin/wifi.sh
     
 on late-fs
     # Start services for bootanim

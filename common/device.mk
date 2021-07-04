@@ -388,11 +388,7 @@ PRODUCT_COPY_FILES += \
 	    
 # Copy device kcm
 PRODUCT_COPY_FILES += \
-        $(LOCAL_PATH)/Vendor_1209_Product_3100.kcm:$(TARGET_COPY_OUT_VENDOR)/usr/keychars/Vendor_1209_Product_3100.kcm
-
-# Wifi script file
-PRODUCT_COPY_FILES += \
-        $(LOCAL_PATH)/wifi.sh:$(TARGET_COPY_OUT_SYSTEM)/bin/wifi.sh
+        $(LOCAL_PATH)/Vendor_1209_Product_3100.kcm:$(TARGET_COPY_OUT_VENDOR)/usr/keychars/Vendor_1209_Product_3100.kcm 
 
 # Build and run only ART
 PRODUCT_RUNTIMES := runtime_libart_default

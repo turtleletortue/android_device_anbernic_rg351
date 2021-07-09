@@ -375,6 +375,7 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/wifi/rt2870.bin:$(TARGET_COPY_OUT_ROOT)/lib/firmware/rt2870.bin \
     $(LOCAL_PATH)/configs/wifi/rtl8192cufw_TMSC.bin:$(TARGET_COPY_OUT_ROOT)/lib/firmware/rtlwifi/rtl8192cufw_TMSC.bin \
     $(LOCAL_PATH)/configs/wifi/wifi_id_list.txt:$(TARGET_COPY_OUT_VENDOR)/etc/wifi_id_list.txt \
+    $(LOCAL_PATH)/configs/wifi/8188eu:$(TARGET_COPY_OUT_VENDOR)/etc/modprobe.d/8188eu \
     $(LOCAL_PATH)/configs/wifi/8192cu:$(TARGET_COPY_OUT_VENDOR)/etc/modprobe.d/8192cu \
     $(LOCAL_PATH)/configs/wifi/8812au:$(TARGET_COPY_OUT_VENDOR)/etc/modprobe.d/8812au \
     $(LOCAL_PATH)/configs/wifi/8814au:$(TARGET_COPY_OUT_VENDOR)/etc/modprobe.d/8814au \

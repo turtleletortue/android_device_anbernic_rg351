@@ -119,7 +119,7 @@
 0bda 17c0 8192cu /vendor/etc/modprobe.d/8192cu /* RTK demoboard - USB-N10E */
 0bda 8177 8192cu /vendor/etc/modprobe.d/8192cu /* 8191cu 1*2 */
 0bda 8178 8192cu /vendor/etc/modprobe.d/8192cu /* 8192cu 2*2 */
-0bda 8179 8192cu /vendor/etc/modprobe.d/8192cu 
+0bda 8179 8188eu /vendor/etc/modprobe.d/8188eu 
 0bda 817c 8192cu /vendor/etc/modprobe.d/8192cu /* 8192CE-VAU USB minCard */
 0bda 8191 8192cu /vendor/etc/modprobe.d/8192cu /* 8192CU 2*2 */
 1058 0631 8192cu /vendor/etc/modprobe.d/8192cu /* Alpha, 8192CU */

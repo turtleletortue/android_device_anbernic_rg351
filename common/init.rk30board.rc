@@ -89,6 +89,9 @@ on late-fs
     
 on post-fs-data
 
+    # Start logging
+    # start logger
+
     # Create directory for hostapd
     mkdir /data/hostapd 0770 system wifi
 
@@ -266,8 +269,11 @@ service wpa_supplicant /vendor/bin/hw/wpa_supplicant \
      disabled
      oneshot
 
-service logcat /system/bin/logcat -f /dev/ttyprintk
-	user system
-	group root
+service logger /system/bin/logcat -b all -D -f /boot/logcat.txt
+	class main
+	user root
+    group root system
+    disabled
+    oneshot
 
 

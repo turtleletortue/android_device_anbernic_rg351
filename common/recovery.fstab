@@ -1,8 +1,8 @@
 #<src>                <mnt_point>  <type>   <mnt_flags and options>               <fs_mgr_flags>
 /dev/block/mmcblk0p2     /system     ext4      ro,barrier=1                      wait
-/dev/block/mmcblk0p3  	 /vendor     ext4      ro,barrier=1                      wait
-/dev/block/mmcblk0p4     /data       f2fs  noatime,nosuid,nodev,nodiratime,inline_data     wait,check,quota
-/dev/block/mmcblk0p4     /data       ext4  noatime,nosuid,nodev,barrier=1,noauto_da_alloc 	 wait,quota
+/dev/block/mmcblk0p3  	 /data     ext4      ro,barrier=1                      wait
+/dev/block/mmcblk0p4     /roms       vfat  defaults     wait,check,quota
+#/dev/block/mmcblk0p4     /data       ext4  noatime,nosuid,nodev,barrier=1,noauto_da_alloc 	 wait,quota
 */block/mmcblk0*  	 /boot     vfat        defaults                      	voldmanaged=sdcard1:1
 */block/mmcblk1*  	 auto     auto        defaults                      	voldmanaged=sdcard1:auto
 */block/sd*              /usb_otg       auto        defaults        			voldmanaged=usb:auto

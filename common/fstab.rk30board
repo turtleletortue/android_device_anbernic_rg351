@@ -1,9 +1,9 @@
 #<src>                <mnt_point>  <type>   <mnt_flags and options>               <fs_mgr_flags>
 /dev/block/mmcblk0p2   /system     ext4      ro,barrier=1                      wait,first_stage_mount
-/dev/block/mmcblk0p3  	/vendor     ext4      ro,barrier=1                      wait,first_stage_mount
 /dev/block/zram0      	 none       swap        defaults                       zramsize=805306368,notrim
-/dev/block/mmcblk0p4   /data       f2fs  noatime,nosuid,nodev,nodiratime,inline_data     wait,latemount,check,quota,formattable,reservedsize=128M
-/dev/block/mmcblk0p4   /data       ext4  noatime,nosuid,nodev,barrier=1,noauto_da_alloc	 quota,latemount,formattable,reservedsize=128M
-*/block/mmcblk0*  	/storage/sdcard1  vfat        defaults                  voldmanaged=sdcard1:1
+/dev/block/mmcblk0p3   /data       f2fs  noatime,nosuid,nodev,nodiratime,inline_data     wait,latemount,check,quota,formattable,reservedsize=128M
+/dev/block/mmcblk0p3   /data       ext4  noatime,nosuid,nodev,barrier=1,noauto_da_alloc	 quota,latemount,formattable,reservedsize=128M
+*/block/mmcblk0*  	auto  vfat        defaults                  voldmanaged=sdcard1:1
+*/block/mmcblk0*  	auto  auto        defaults                  voldmanaged=sdcard1:4
 */block/mmcblk1*  	 auto     auto        defaults                      	voldmanaged=sdcard1:auto
 */block/sd*              auto      auto        defaults        			voldmanaged=usb:auto

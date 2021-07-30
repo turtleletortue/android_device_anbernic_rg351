@@ -23,8 +23,10 @@ echo "$_mode" > /sys/class/graphics/fb0/mode
 
 mount -t auto -v /dev/mmcblk0p1 /mnt
 
-[ -f /mnt/rk3326-rg351p.dtb ] && DEVICE=1
-[ -f /mnt/rk3326-rg351v.dtb ] && DEVICE=2
+[ -f /mnt/rk3326-rg351p.dtb ] && DEVICE=1 && echo "Rg351P/M Detected"
+[ -f /mnt/rk3326-rg351v.dtb ] && DEVICE=2 && echo "Rg351V Detected"
+
+unzip splashes.zip
 
 if [ $DEVICE = 1 ]; then
     cp /resizing.ppm /tmp/resizing.ppm
@@ -42,21 +44,44 @@ busybox sleep 1
 
 fsck /dev/mmcblk0p2
 busybox sleep 1
-fsck /dev/mmcblk0p3
 
-busybox sleep 1
+if [ $DEVICE = 1 ]; then
+    echo "Fdisk Stage"
+    (
+    echo
+    echo n
+    echo p
+    echo 3
+    echo 
+    echo +16G
+    echo
+    echo n
+    echo p
+    echo
+    echo
+    echo
+    echo
+    echo t
+    echo 4
+    echo 7
+    echo w
+    ) | fdisk /dev/mmcblk0
+fi
 
-echo "Fdisk Stage"
-(
-echo
-echo n
-echo p
-echo
-echo
-echo
-echo
-echo w
-) | fdisk /dev/mmcblk0
+if [ $DEVICE = 2 ]; then
+    echo "Fdisk Stage"
+    (
+    echo
+    echo n
+    echo p
+    echo 3
+    echo 
+    echo
+    echo
+    echo
+    echo w
+    ) | fdisk /dev/mmcblk0
+fi
 
 busybox sleep 1
 
@@ -70,7 +95,12 @@ sleep 4
 
 echo "Resizing starting"
 #resize.f2fs /dev/mmcblk0p4
-mke2fs -t ext4 /dev/mmcblk0p4
+mke2fs -t ext4 /dev/mmcblk0p3
+
+if [ $DEVICE = 1 ]; then
+    mkfs.exfat /dev/mmcblk0p4 -n ROMS
+fi
+
 sync
 
 sleep 4
@@ -84,6 +114,66 @@ sync
 echo "Switching to Android Boot"
 mv /mnt/boot.ini /mnt/boot.ini-resize
 cp /mnt/boot.ini-android /mnt/boot.ini
+
+echo "Checking for MindTheGapps zip"
+
+if [ -f /mnt/gapps/toybox ]; then
+    echo "Google Apps detected, installing..."
+    if [ $DEVICE = 1 ]; then
+        cp /installgapps.ppm /tmp/installgapps.ppm
+    fi
+    if [ $DEVICE = 2 ]; then
+        cp /installgappsv.ppm /tmp/installgapps.ppm
+    fi
+    /sbin/busybox-armv8l fbsplash -s /tmp/installgapps.ppm
+    echo "Install flow started"
+    # Based on mindthegapps update-binary
+    chmod 755 /mnt/gapps/toybox
+    mkdir /system
+    mount -t auto -v /dev/mmcblk0p2 /system
+    cd /mnt/gapps/
+    # Permissions; taken from mindthegapps update-binary
+    for d in `find . -mindepth 1 -type d -type d`; do
+        chmod 0755 $d
+        chown root:root $d
+    done
+    for f in `find . -type f`; do
+       type=$(echo "$f" | sed 's/.*\.//')
+        if [ "$type" = "sh" ] || [ "$type" = "$f" ]; then
+            chmod 0755 $f
+        else
+            chmod 0644 $f
+        fi
+        chown root:root $f
+        /mnt/gapps/toybox chcon -h u:object_r:system_file:s0 $f
+        /mnt/gapps/toybox chcon u:object_r:system_file:s0 $f
+    done
+    cd /
+    cp -p -r /mnt/gapps/system/product/* /system/system/product/
+    cp -p -r /mnt/gapps/system/system_ext/* /system/system/system_ext/
+    # Remove apps that just waste resources
+    rm -rf /system/system/product/app/GoogleTTS
+    rm -rf /system/system/product/app/MarkupGoogle
+    rm -rf /system/system/product/app/talkback
+    rm -rf /system/system/product/priv-app/AndroidMigratePrebuilt
+    rm -rf /system/system/product/priv-app/SetupWizardPrebuilt
+    rm -rf /system/system/product/priv-app/Velvet
+    rm -rf /mnt/gapps/
+    sync
+    if [ ! -f /system/system/system_ext/priv-app/GoogleServicesFramework/GoogleServicesFramework.apk ]; then
+        echo "Display Google App install failure to user"
+        if [ $DEVICE = 1 /system/system/ ]; then
+            cp /gappsfail.ppm /tmp/gappsfail.ppm
+        fi
+        if [ $DEVICE = 2 ]; then
+            cp /gappsfailv.ppm /tmp/gappsfail.ppm
+        fi
+        /sbin/busybox-armv8l fbsplash -s /tmp/mnt/gappsfail.ppm
+        sleep 10
+    fi
+    umount /system
+    sleep 2
+fi
 
 if [ $DEVICE = 1 ]; then
     cp /resized.ppm /tmp/resized.ppm
@@ -120,4 +210,3 @@ sync
 umount /mnt
 sleep 4
 echo "End"
-

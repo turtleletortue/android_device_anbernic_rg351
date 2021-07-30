@@ -34,12 +34,7 @@ else
 	echo p
 	echo 2
 	echo
-	echo +2000M
-	echo n
-	echo p
-	echo 3
-	echo
-	echo +256M
+	echo +2256M
 	echo
 	echo
 	echo t
@@ -61,11 +56,11 @@ else
 	sleep 5
 	mkfs.fat -F 32 /dev/mapper/${LOOPDEV}p1 -n BOOT
 	mkfs.ext4 /dev/mapper/${LOOPDEV}p2 -L system
-	mkfs.ext4 /dev/mapper/${LOOPDEV}p3 -L vendor
+	#mkfs.ext4 /dev/mapper/${LOOPDEV}p3 -L vendor
 	echo "Copying system..."
 	dd if=$OUTDIR/system.img of=/dev/mapper/${LOOPDEV}p2 bs=1M
 	echo "Copying vendor..."
-	dd if=$OUTDIR/vendor.img of=/dev/mapper/${LOOPDEV}p3 bs=1M
+	#dd if=$OUTDIR/vendor.img of=/dev/mapper/${LOOPDEV}p3 bs=1M
 	echo "Copying BOOT..."
 	mkdir -p sdcard/BOOT
 	sync

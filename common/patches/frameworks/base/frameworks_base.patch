@@ -1,5 +1,5 @@
 diff --git a/api/current.txt b/api/current.txt
-index 952ccdad992..c9b1a23eaef 100644
+index 952ccdad992c..c9b1a23eaef2 100644
 --- a/api/current.txt
 +++ b/api/current.txt
 @@ -52920,6 +52920,11 @@ package android.view {
@@ -15,7 +15,7 @@ index 952ccdad992..c9b1a23eaef 100644
      field public static final int KEYCODE_TV_NETWORK = 241; // 0xf1
      field public static final int KEYCODE_TV_NUMBER_ENTRY = 234; // 0xea
 diff --git a/api/test-current.txt b/api/test-current.txt
-index cf97b848e80..53025f635a0 100644
+index cf97b848e80b..53025f635a06 100644
 --- a/api/test-current.txt
 +++ b/api/test-current.txt
 @@ -5126,7 +5126,7 @@ package android.view {
@@ -28,7 +28,7 @@ index cf97b848e80..53025f635a0 100644
  
    public final class KeyboardShortcutGroup implements android.os.Parcelable {
 diff --git a/core/java/android/app/Activity.java b/core/java/android/app/Activity.java
-index e123af728b2..47f34e4ba2f 100644
+index c976a9bfb30d..7e8b370011bf 100644
 --- a/core/java/android/app/Activity.java
 +++ b/core/java/android/app/Activity.java
 @@ -36,6 +36,20 @@ import android.annotation.StyleRes;
@@ -70,7 +70,7 @@ index e123af728b2..47f34e4ba2f 100644
              if (getApplicationInfo().targetSdkVersion
                      >= Build.VERSION_CODES.ECLAIR) {
 diff --git a/core/java/android/net/ConnectivityManager.java b/core/java/android/net/ConnectivityManager.java
-index ed03f5198d6..659262070df 100644
+index ed03f5198d6f..659262070df9 100644
 --- a/core/java/android/net/ConnectivityManager.java
 +++ b/core/java/android/net/ConnectivityManager.java
 @@ -3115,7 +3115,7 @@ public class ConnectivityManager {
@@ -83,7 +83,7 @@ index ed03f5198d6..659262070df 100644
       * @hide
       * @deprecated Doesn't properly deal with multiple connected networks of the same type.
 diff --git a/core/java/android/os/Build.java b/core/java/android/os/Build.java
-index 8c6fca50fa8..83c8416018a 100755
+index 8c6fca50fa8b..83c8416018af 100755
 --- a/core/java/android/os/Build.java
 +++ b/core/java/android/os/Build.java
 @@ -1113,7 +1113,7 @@ public class Build {
@@ -105,7 +105,7 @@ index 8c6fca50fa8..83c8416018a 100755
          final String system = SystemProperties.get("ro.system.build.fingerprint");
          final String vendor = SystemProperties.get("ro.vendor.build.fingerprint");
 diff --git a/core/java/android/view/IWindowManager.aidl b/core/java/android/view/IWindowManager.aidl
-index f30c87fafa0..b9952f181fd 100644
+index f30c87fafa04..b9952f181fd2 100644
 --- a/core/java/android/view/IWindowManager.aidl
 +++ b/core/java/android/view/IWindowManager.aidl
 @@ -113,6 +113,10 @@ interface IWindowManager
@@ -120,7 +120,7 @@ index f30c87fafa0..b9952f181fd 100644
      void setEventDispatching(boolean enabled);
  
 diff --git a/core/java/android/view/KeyEvent.java b/core/java/android/view/KeyEvent.java
-index 144dd8b3c36..c5a04304f40 100644
+index 7976576a50f5..5206195ebed3 100644
 --- a/core/java/android/view/KeyEvent.java
 +++ b/core/java/android/view/KeyEvent.java
 @@ -825,12 +825,22 @@ public class KeyEvent extends InputEvent implements Parcelable {
@@ -148,7 +148,7 @@ index 144dd8b3c36..c5a04304f40 100644
      // NOTE: If you add a new keycode here you must also add it to:
      //  isSystem()
 diff --git a/core/java/android/view/ViewGroup.java b/core/java/android/view/ViewGroup.java
-index 77fedd7c30d..95c6d0149f6 100644
+index 77fedd7c30d4..95c6d0149f63 100644
 --- a/core/java/android/view/ViewGroup.java
 +++ b/core/java/android/view/ViewGroup.java
 @@ -1956,7 +1956,7 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager
@@ -160,10 +160,24 @@ index 77fedd7c30d..95c6d0149f6 100644
                  return true;
              }
          }
-         
-
+diff --git a/core/res/res/values/attrs.xml b/core/res/res/values/attrs.xml
+index 2f1bcdc76afb..d7bb6dc53870 100644
+--- a/core/res/res/values/attrs.xml
++++ b/core/res/res/values/attrs.xml
+@@ -1931,6 +1931,11 @@
+         <enum name="KEYCODE_THUMBS_UP" value="286" />
+         <enum name="KEYCODE_THUMBS_DOWN" value="287" />
+         <enum name="KEYCODE_PROFILE_SWITCH" value="288" />
++        <enum name="KEYCODE_TV_KEYMOUSE_LEFT" value="289" />
++        <enum name="KEYCODE_TV_KEYMOUSE_RIGHT" value="290" />
++        <enum name="KEYCODE_TV_KEYMOUSE_UP" value="291" />
++        <enum name="KEYCODE_TV_KEYMOUSE_DOWN" value="292" />
++        <enum name="KEYCODE_TV_KEYMOUSE_SWITCH" value="293" />
+     </attr>
+ 
+     <!-- ***************************************************************** -->
 diff --git a/data/keyboards/Generic.kl b/data/keyboards/Generic.kl
-index 51500439d3c..00a3c0a7902 100644
+index 51500439d3cf..00a3c0a79022 100644
 --- a/data/keyboards/Generic.kl
 +++ b/data/keyboards/Generic.kl
 @@ -144,7 +144,7 @@ key 121   NUMPAD_COMMA
@@ -176,7 +190,7 @@ index 51500439d3c..00a3c0a7902 100644
  key 127   MENU
  key 128   MEDIA_STOP
 diff --git a/non-updatable-api/current.txt b/non-updatable-api/current.txt
-index 5f15216e840..1f8ccf3f71c 100644
+index 5f15216e8400..1f8ccf3f71c5 100644
 --- a/non-updatable-api/current.txt
 +++ b/non-updatable-api/current.txt
 @@ -51081,6 +51081,11 @@ package android.view {
@@ -192,10 +206,10 @@ index 5f15216e840..1f8ccf3f71c 100644
      field public static final int KEYCODE_TV_NETWORK = 241; // 0xf1
      field public static final int KEYCODE_TV_NUMBER_ENTRY = 234; // 0xea
 diff --git a/services/core/java/com/android/server/input/InputManagerService.java b/services/core/java/com/android/server/input/InputManagerService.java
-index 08b3b777e52..2f9c84c3391 100644
+index 91f169a6732a..c1298e5522a3 100644
 --- a/services/core/java/com/android/server/input/InputManagerService.java
 +++ b/services/core/java/com/android/server/input/InputManagerService.java
-@@ -252,6 +252,8 @@ public class InputManagerService extends IInputManager.Stub
+@@ -253,6 +253,8 @@ public class InputManagerService extends IInputManager.Stub
      private static native boolean nativeCanDispatchToDisplay(long ptr, int deviceId, int displayId);
      private static native void nativeNotifyPortAssociationsChanged(long ptr);
      private static native void nativeSetMotionClassifierEnabled(long ptr, boolean enabled);
@@ -204,7 +218,7 @@ index 08b3b777e52..2f9c84c3391 100644
  
      // Input event injection constants defined in InputDispatcher.h.
      private static final int INPUT_EVENT_INJECTION_SUCCEEDED = 0;
-@@ -438,6 +440,14 @@ public class InputManagerService extends IInputManager.Stub
+@@ -439,6 +441,14 @@ public class InputManagerService extends IInputManager.Stub
          nativeSetDisplayViewports(mPtr, viewports.toArray(new DisplayViewport[0]));
      }
  
@@ -220,10 +234,10 @@ index 08b3b777e52..2f9c84c3391 100644
       * Gets the current state of a key or button by key code.
       * @param deviceId The input device id, or -1 to consult all devices.
 diff --git a/services/core/java/com/android/server/policy/PhoneWindowManager.java b/services/core/java/com/android/server/policy/PhoneWindowManager.java
-index 2689703d4b3..73fbf83e760 100644
+index 2e58c98da57e..0ae5aa768a39 100644
 --- a/services/core/java/com/android/server/policy/PhoneWindowManager.java
 +++ b/services/core/java/com/android/server/policy/PhoneWindowManager.java
-@@ -703,6 +703,51 @@ public class PhoneWindowManager implements WindowManagerPolicy {
+@@ -704,6 +704,51 @@ public class PhoneWindowManager implements WindowManagerPolicy {
      private static final int MSG_POWER_VERY_LONG_PRESS = 25;
      private static final int MSG_RINGER_TOGGLE_CHORD = 26;
  
@@ -275,7 +289,7 @@ index 2689703d4b3..73fbf83e760 100644
      // Lineage additions
      private static final int MSG_TOGGLE_TORCH = 100;
      private static final int MSG_CAMERA_LONG_PRESS = 101;
-@@ -2996,6 +3041,21 @@ public class PhoneWindowManager implements WindowManagerPolicy {
+@@ -3013,6 +3058,21 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                      + repeatCount + " keyguardOn=" + keyguardOn + " canceled=" + canceled);
          }
  
@@ -298,7 +312,7 @@ index 2689703d4b3..73fbf83e760 100644
          // but we're not sure, then tell the dispatcher to wait a little while and
          // try again later before dispatching.
 diff --git a/services/core/java/com/android/server/wm/WindowManagerService.java b/services/core/java/com/android/server/wm/WindowManagerService.java
-index a3fcda9c0c8..fee3483f30b 100644
+index 355a531496f3..59c50120181c 100644
 --- a/services/core/java/com/android/server/wm/WindowManagerService.java
 +++ b/services/core/java/com/android/server/wm/WindowManagerService.java
 @@ -350,6 +350,16 @@ public class WindowManagerService extends IWindowManager.Stub
@@ -374,7 +388,7 @@ index a3fcda9c0c8..fee3483f30b 100644
      public void setEventDispatching(boolean enabled) {
          if (!checkCallingPermission(MANAGE_APP_TOKENS, "setEventDispatching()")) {
 diff --git a/services/core/jni/com_android_server_input_InputManagerService.cpp b/services/core/jni/com_android_server_input_InputManagerService.cpp
-index 396d67af9ba..f8a97650a8e 100644
+index 396d67af9baa..f8a97650a8e2 100644
 --- a/services/core/jni/com_android_server_input_InputManagerService.cpp
 +++ b/services/core/jni/com_android_server_input_InputManagerService.cpp
 @@ -41,6 +41,7 @@

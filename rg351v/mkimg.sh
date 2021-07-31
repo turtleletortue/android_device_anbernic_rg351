@@ -29,7 +29,7 @@ else
 	echo p
 	echo 1
 	echo
-	echo +256M
+	echo +512M
 	echo n
 	echo p
 	echo 2
@@ -66,7 +66,7 @@ else
 	sync
 	mount /dev/mapper/${LOOPDEV}p1 sdcard/BOOT
 	sync
-	cp BOOT/* sdcard/BOOT
+	cp -R BOOT/* sdcard/BOOT
 	sync
 	umount /dev/mapper/${LOOPDEV}p1
 	rm -rf sdcard

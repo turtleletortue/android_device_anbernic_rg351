@@ -1,5 +1,5 @@
 PLATFORM_PATH := device/anbernic/rg351p
-TARGET_SCREEN_DENSITY 		:= 120
+TARGET_SCREEN_DENSITY 		:= 140
 # Camera
 USE_CAMERA_STUB := false
 

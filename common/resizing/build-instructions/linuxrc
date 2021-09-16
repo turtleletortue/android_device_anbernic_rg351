@@ -23,8 +23,12 @@ echo "$_mode" > /sys/class/graphics/fb0/mode
 
 mount -t auto -v /dev/mmcblk0p1 /mnt
 
-[ -f /mnt/rk3326-rg351p.dtb ] && DEVICE=1 && echo "Rg351P/M Detected"
+[ -f /mnt/rk3326-rg351p.dtb ] && DEVICE=1 && echo "Rg351P/M Detected" && EXFATONINTERNAL=1 && echo "Enabled Exfat partition on OS SD Card"
 [ -f /mnt/rk3326-rg351v.dtb ] && DEVICE=2 && echo "Rg351V Detected"
+[ -f /mnt/rk3326-rg351mplus.dtb ] && DEVICE=2 && echo "Rg351MP Detected"
+[ -f /mnt/rk3326-odroidgo3-linux.dtb ] && DEVICE=3 && echo "Odroid Go Super Detected" && EXFATONINTERNAL=1 && echo "Enabled Exfat partition on OS SD Card"
+[ -f /mnt/rk3326-rgb10max-linux.dtb ] && DEVICE=4 && echo "Powkiddy RGB10 Max Detected" && EXFATONINTERNAL=1 && echo "Enabled Exfat partition on OS SD Card"
+[ -f /mnt/rk3326-gameforce-linux.dtb ] && DEVICE=5 && echo "Gameforce Handheld Detected" && EXFATONINTERNAL=1 && echo "Enabled Exfat partition on OS SD Card"
 
 unzip splashes.zip
 
@@ -33,6 +37,18 @@ if [ $DEVICE = 1 ]; then
 fi
 
 if [ $DEVICE = 2 ]; then
+    cp /resizingv.ppm /tmp/resizing.ppm
+fi
+
+if [ $DEVICE = 3 ]; then
+    cp /resizingogs.ppm /tmp/resizing.ppm
+fi
+
+if [ $DEVICE = 4 ]; then
+    cp /resizingogs.ppm /tmp/resizing.ppm
+fi
+
+if [ $DEVICE = 5 ]; then
     cp /resizingv.ppm /tmp/resizing.ppm
 fi
 
@@ -45,7 +61,7 @@ busybox sleep 1
 fsck /dev/mmcblk0p2
 busybox sleep 1
 
-if [ $DEVICE = 1 ]; then
+if [ $EXFATONINTERNAL = 1 ]; then
     echo "Fdisk Stage"
     (
     echo
@@ -97,7 +113,7 @@ echo "Resizing starting"
 #resize.f2fs /dev/mmcblk0p4
 mke2fs -t ext4 /dev/mmcblk0p3
 
-if [ $DEVICE = 1 ]; then
+if [ $EXFATONINTERNAL = 1 ]; then
     mkfs.exfat /dev/mmcblk0p4 -n ROMS
 fi
 
@@ -123,6 +139,15 @@ if [ -f /mnt/gapps/toybox ]; then
         cp /installgapps.ppm /tmp/installgapps.ppm
     fi
     if [ $DEVICE = 2 ]; then
+        cp /installgappsv.ppm /tmp/installgapps.ppm
+    fi
+    if [ $DEVICE = 3 ]; then
+        cp /installgappsogs.ppm /tmp/installgapps.ppm
+    fi
+    if [ $DEVICE = 4 ]; then
+        cp /installgappsogs.ppm /tmp/installgapps.ppm
+    fi
+    if [ $DEVICE = 5 ]; then
         cp /installgappsv.ppm /tmp/installgapps.ppm
     fi
     /sbin/busybox-armv8l fbsplash -s /tmp/installgapps.ppm
@@ -162,10 +187,19 @@ if [ -f /mnt/gapps/toybox ]; then
     sync
     if [ ! -f /system/system/system_ext/priv-app/GoogleServicesFramework/GoogleServicesFramework.apk ]; then
         echo "Display Google App install failure to user"
-        if [ $DEVICE = 1 /system/system/ ]; then
+        if [ $DEVICE = 1 ]; then
             cp /gappsfail.ppm /tmp/gappsfail.ppm
         fi
         if [ $DEVICE = 2 ]; then
+            cp /gappsfailv.ppm /tmp/gappsfail.ppm
+        fi
+        if [ $DEVICE = 3 ]; then
+            cp /gappsfailogs.ppm /tmp/gappsfail.ppm
+        fi
+        if [ $DEVICE = 4 ]; then
+            cp /gappsfailogs.ppm /tmp/gappsfail.ppm
+        fi
+        if [ $DEVICE = 5 ]; then
             cp /gappsfailv.ppm /tmp/gappsfail.ppm
         fi
         /sbin/busybox-armv8l fbsplash -s /tmp/mnt/gappsfail.ppm
@@ -180,6 +214,18 @@ if [ $DEVICE = 1 ]; then
 fi
 
 if [ $DEVICE = 2 ]; then
+    cp /resizedv.ppm /tmp/resized.ppm
+fi
+
+if [ $DEVICE = 5 ]; then
+    cp /resizedogs.ppm /tmp/resized.ppm
+fi
+
+if [ $DEVICE = 4 ]; then
+    cp /resizedogs.ppm /tmp/resized.ppm
+fi
+
+if [ $DEVICE = 5 ]; then
     cp /resizedv.ppm /tmp/resized.ppm
 fi
 

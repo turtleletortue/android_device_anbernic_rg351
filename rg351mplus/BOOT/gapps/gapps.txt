@@ -1,0 +1,10 @@
+Download MindTheGapps-11.0.0-arm64-20210412_124247.zip and extract it into this folder. It will be taken care of on first boot. Note, do not put it in a subfolder. It should be set up like this.
+
+└── gapps
+    ├── gapps.txt
+    ├── META_INF
+    ├── system
+    └── toybox
+
+
+

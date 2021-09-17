@@ -1,16 +1,8 @@
 diff --git a/media/libmediaplayerservice/Android.bp b/media/libmediaplayerservice/Android.bp
-index 21da3ce113..6e5af3f154 100644
+index 21da3ce113..3bb6169202 100644
 --- a/media/libmediaplayerservice/Android.bp
 +++ b/media/libmediaplayerservice/Android.bp
-@@ -12,6 +12,7 @@ cc_library_shared {
-         "RemoteDisplay.cpp",
-         "StagefrightRecorder.cpp",
-         "TestPlayerStub.cpp",
-+        "RemoteDisplay.cpp",
-     ],
- 
-     shared_libs: [
-@@ -44,6 +45,7 @@ cc_library_shared {
+@@ -44,6 +44,7 @@ cc_library_shared {
          "libstagefright_foundation",
          "libstagefright_httplive",
          "libutils",

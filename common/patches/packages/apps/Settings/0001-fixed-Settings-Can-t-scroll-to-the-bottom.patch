@@ -1,0 +1,26 @@
+From 00f5c94509ffaf18004d255bd306184f23a2b434 Mon Sep 17 00:00:00 2001
+From: "wei.zeng" <wei.zeng@advantech.com.cn>
+Date: Thu, 22 Apr 2021 10:34:11 +0800
+Subject: [PATCH] fixed Settings Can't scroll to the bottom
+
+---
+ res/layout/search_bar.xml | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/res/layout/search_bar.xml b/res/layout/search_bar.xml
+index 420c965a19..232ed8a972 100644
+--- a/res/layout/search_bar.xml
++++ b/res/layout/search_bar.xml
+@@ -21,8 +21,7 @@
+     android:id="@+id/search_bar"
+     style="@style/SearchBarStyle"
+     android:layout_width="match_parent"
+-    android:layout_height="wrap_content"
+-    app:layout_scrollFlags="scroll|enterAlways">
++    android:layout_height="wrap_content">
+     <Toolbar
+         android:id="@+id/search_action_bar"
+         android:layout_width="match_parent"
+-- 
+2.25.1
+

@@ -1,0 +1,26 @@
+From c9fe2f10e288e581a56841faf6e86819bfe3481f Mon Sep 17 00:00:00 2001
+From: goenjoy <goenjoy@khadas.com>
+Date: Thu, 15 Aug 2019 18:41:53 +0800
+Subject: [PATCH] remove battery log
+
+---
+ healthd/BatteryMonitor.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+ mode change 100644 => 100755 healthd/BatteryMonitor.cpp
+
+diff --git a/healthd/BatteryMonitor.cpp b/healthd/BatteryMonitor.cpp
+old mode 100644
+new mode 100755
+index b20839c6d..eb6091591
+--- a/healthd/BatteryMonitor.cpp
++++ b/healthd/BatteryMonitor.cpp
+@@ -415,7 +415,7 @@ void BatteryMonitor::logValues(void) {
+              props.chargerAcOnline ? "a" : "", props.chargerUsbOnline ? "u" : "",
+              props.chargerWirelessOnline ? "w" : "");
+ 
+-    KLOG_WARNING(LOG_TAG, "%s\n", dmesgline);
++    //KLOG_WARNING(LOG_TAG, "%s\n", dmesgline);
+ }
+ 
+ bool BatteryMonitor::isChargerOnline() {
+

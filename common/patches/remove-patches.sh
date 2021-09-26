@@ -3,7 +3,15 @@ cd ../../../../vendor/lineage
 git reset --hard
 git clean -f -d
 
-cd ../../build/soong
+cd ../../art
+git reset --hard
+git clean -f -d
+
+cd ../bionic
+git reset --hard
+git clean -f -d
+
+cd ../build/soong
 git reset --hard
 
 cd ../../external/compiler-rt
@@ -35,10 +43,21 @@ git clean -f -d
 cd ../../system/core
 git reset --hard
 git clean -f -d
-cd ../hardware/interfaces
+cd healthd
+git reset --hard
+git clean -f -d
+cd ../../hardware/interfaces
 git reset --hard
 git clean -f -d
 cd ../../memory/libion
+git reset --hard
+git clean -f -d
+
+cd ../../../build/make
+git reset --hard 
+git clean -f -d
+
+cd ../../packages/apps/Settings
 git reset --hard
 git clean -f -d
 

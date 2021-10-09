@@ -16,7 +16,7 @@ if [ -f $IMGNAME ]; then
 	echo "File $IMGNAME already exists!"
 else
     echo "Copying over kernel files"
-    cp ../common/resizing/prebuilt/Image-resizing BOOT/
+    cp ../common/resizing/prebuilt/Image-resizing-rg351p BOOT/Image-resizing
     cp $OUTDIR/obj/KERNEL_OBJ/arch/arm64/boot/Image BOOT/
     cp $OUTDIR/obj/KERNEL_OBJ/arch/arm64/boot/dts/rockchip/rk3326-$DEVICE.dtb BOOT/
 	echo "Creating image file $IMGNAME..."

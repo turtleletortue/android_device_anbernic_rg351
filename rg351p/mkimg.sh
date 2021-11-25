@@ -1,7 +1,7 @@
 #/bin/bash
 
 LINEAGEVERSION=lineage-18.1
-DATE=`date +%Y%m%d`
+DATE=`date -u +%Y%m%d`
 DEVICE=rg351p
 IMGNAME=$LINEAGEVERSION-$DATE-$DEVICE.img
 IMGSIZE=3

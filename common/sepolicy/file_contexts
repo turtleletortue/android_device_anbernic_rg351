@@ -22,3 +22,5 @@
 /vendor/lib(64)?/libGLESv1_CM_swiftshader\.so    u:object_r:same_process_hal_file:s0
 /vendor/lib(64)?/libGLESv2_swiftshader\.so       u:object_r:same_process_hal_file:s0
 /vendor/lib(64)?/libOpenglSystemCommon\.so       u:object_r:same_process_hal_file:s0
+
+/system/bin/phh-su                   u:object_r:phhsu_exec:s0

@@ -427,6 +427,11 @@ PRODUCT_PACKAGES += \
 	TVbro \
 	LeanbackIME \
 
+# Include rootaccess
+PRODUCT_PACKAGES += \
+    phh-su \
+    SuperUser
+
 # Exclude AudioFX
 TARGET_EXCLUDES_AUDIOFX := true
 

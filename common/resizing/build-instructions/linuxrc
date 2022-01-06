@@ -21,7 +21,11 @@ _mode="$(cat /sys/class/graphics/fb0/modes)"
 echo "Setting framebuffer mode to: $_mode"
 echo "$_mode" > /sys/class/graphics/fb0/mode
 
-mount -t auto -v /dev/mmcblk0p1 /mnt
+if [ -f /dev/mmcblk2 ]; then
+    mount -t auto -v /dev/mmcblk1p1 /mnt
+else
+    mount -t auto -v /dev/mmcblk0p1 /mnt
+fi
 
 [ -f /mnt/rk3326-rg351p.dtb ] && DEVICE=1 && echo "Rg351P/M Detected" && EXFATONINTERNAL=1 && echo "Enabled Exfat partition on OS SD Card"
 [ -f /mnt/rk3326-rg351v.dtb ] && DEVICE=2 && echo "Rg351V Detected"
@@ -29,6 +33,7 @@ mount -t auto -v /dev/mmcblk0p1 /mnt
 [ -f /mnt/rk3326-odroidgo3-linux.dtb ] && DEVICE=3 && echo "Odroid Go Super Detected" && EXFATONINTERNAL=1 && echo "Enabled Exfat partition on OS SD Card"
 [ -f /mnt/rk3326-rgb10max-linux.dtb ] && DEVICE=4 && echo "Powkiddy RGB10 Max Detected" && EXFATONINTERNAL=1 && echo "Enabled Exfat partition on OS SD Card"
 [ -f /mnt/rk3326-gameforce-linux.dtb ] && DEVICE=5 && echo "Gameforce Handheld Detected" && EXFATONINTERNAL=1 && echo "Enabled Exfat partition on OS SD Card"
+[ -e /dev/mmcblk2 ] && DEVICE=6 && echo "Rg552 Detected!"
 
 unzip splashes.zip
 
@@ -52,13 +57,25 @@ if [ $DEVICE = 5 ]; then
     cp /resizingv.ppm /tmp/resizing.ppm
 fi
 
+if [ $DEVICE = 6 ]; then
+    cp /resizing.ppm /tmp/resizing.ppm
+fi
+
+
 /sbin/busybox-armv8l fbsplash -s /tmp/resizing.ppm
 
 umount /dev/mmcblk0p*
+if [ $DEVICE = 6 ]; then
+    umount /dev/mmcblk1p*
+fi
 
 busybox sleep 1
 
-fsck /dev/mmcblk0p2
+if [ $DEVICE = 6 ]; then
+    fsck /dev/mmcblk1p2
+else
+    fsck /dev/mmcblk0p2
+fi
 busybox sleep 1
 
 if [ $EXFATONINTERNAL = 1 ]; then
@@ -99,10 +116,28 @@ if [ $DEVICE = 2 ]; then
     ) | fdisk /dev/mmcblk0
 fi
 
+if [ $DEVICE = 6 ]; then
+    echo "Fdisk Stage"
+    (
+    echo
+    echo n
+    echo p
+    echo 3
+    echo 
+    echo
+    echo
+    echo
+    echo w
+    ) | fdisk /dev/mmcblk1
+fi
+
 busybox sleep 1
 
 sync
 partprobe /dev/mmcblk0
+if [ $DEVICE = 6 ]; then
+    partprobe /dev/mmcblk1
+fi
 partprobe
 busybox sleep 1
 sync
@@ -111,7 +146,11 @@ sleep 4
 
 echo "Resizing starting"
 #resize.f2fs /dev/mmcblk0p4
-mke2fs -t ext4 /dev/mmcblk0p3
+if [ $DEVICE = 6 ]; then
+    mkfs.f2fs /dev/mmcblk1p3
+else
+    mkfs.f2fs /dev/mmcblk0p3
+fi
 
 if [ $EXFATONINTERNAL = 1 ]; then
     mkfs.exfat /dev/mmcblk0p4 -n ROMS
@@ -124,7 +163,11 @@ sleep 4
 sleep 1
 
 mkdir /mnt
-mount -t auto -v /dev/mmcblk0p1 /mnt
+if [ $DEVICE = 6 ]; then
+    mount -t auto -v /dev/mmcblk1p1 /mnt
+else
+    mount -t auto -v /dev/mmcblk0p1 /mnt
+fi
 sync
 
 echo "Switching to Android Boot"
@@ -155,7 +198,11 @@ if [ -f /mnt/gapps/toybox ]; then
     # Based on mindthegapps update-binary
     chmod 755 /mnt/gapps/toybox
     mkdir /system
-    mount -t auto -v /dev/mmcblk0p2 /system
+    if [ $DEVICE = 6 ]; then
+        mount -t auto -v /dev/mmcblk1p2 /system
+    else
+        mount -t auto -v /dev/mmcblk0p2 /system
+    fi
     cd /mnt/gapps/
     # Permissions; taken from mindthegapps update-binary
     for d in `find . -mindepth 1 -type d -type d`; do
@@ -209,6 +256,13 @@ if [ -f /mnt/gapps/toybox ]; then
     sleep 2
 fi
 
+# RG552 bootloader
+if [ $DEVICE = 6 ]; then
+    [ -f /mnt/idbloader.img ] && dd if=/mnt/idbloader.img of=/dev/mmcblk1 conv=fsync bs=512 seek=64
+    [ -f /mnt/uboot.img ] && dd if=/mnt/uboot.img of=/dev/mmcblk1 conv=fsync bs=512 seek=16384
+    [ -f /mnt/trust.img ] && dd if=/mnt/trust.img of=/dev/mmcblk1 conv=fsync bs=512 seek=24576
+fi
+
 if [ $DEVICE = 1 ]; then
     cp /resized.ppm /tmp/resized.ppm
 fi
@@ -227,6 +281,10 @@ fi
 
 if [ $DEVICE = 5 ]; then
     cp /resizedv.ppm /tmp/resized.ppm
+fi
+
+if [ $DEVICE = 6 ]; then
+    cp /resized.ppm /tmp/resized.ppm
 fi
 
 /sbin/busybox-armv8l fbsplash -s /tmp/resized.ppm
@@ -249,7 +307,11 @@ echo "Didn't reboot????"
 echo /sbin/mdev >/proc/sys/kernel/hotplug
 mdev -s
 
-mount -t auto -v /dev/mmcblk0p1 /mnt
+if [ device = 6 ]; then
+    mount -t auto -v /dev/mmcblk1p1 /mnt
+else
+    mount -t auto -v /dev/mmcblk0p1 /mnt
+fi
 sync
 echo "Failed to reboot, init will end and kernel will panic." > /mnt/rebootfailed.log
 sync

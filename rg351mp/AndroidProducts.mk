@@ -15,9 +15,9 @@
 #
 
 PRODUCT_MAKEFILES := \
-	$(LOCAL_DIR)/lineage_rg351mplus.mk
+	$(LOCAL_DIR)/lineage_rg351mp.mk
 
 COMMON_LUNCH_CHOICES := \
-	lineage_rg351mplus-user \
-	lineage_rg351mplus-userdebug \
-	lineage_rg351mplus-eng
+	lineage_rg351mp-user \
+	lineage_rg351mp-userdebug \
+	lineage_rg351mp-eng

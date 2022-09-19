@@ -29,7 +29,7 @@ fi
 
 [ -f /mnt/rk3326-rg351p.dtb ] && DEVICE=1 && echo "Rg351P/M Detected" && EXFATONINTERNAL=1 && echo "Enabled Exfat partition on OS SD Card"
 [ -f /mnt/rk3326-rg351v.dtb ] && DEVICE=2 && echo "Rg351V Detected"
-[ -f /mnt/rk3326-rg351mplus.dtb ] && DEVICE=2 && echo "Rg351MP Detected"
+[ -f /mnt/rk3326-rg351mp.dtb ] && DEVICE=2 && echo "Rg351MP Detected"
 [ -f /mnt/rk3326-odroidgo3-linux.dtb ] && DEVICE=3 && echo "Odroid Go Super Detected" && EXFATONINTERNAL=1 && echo "Enabled Exfat partition on OS SD Card"
 [ -f /mnt/rk3326-rgb10max-linux.dtb ] && DEVICE=4 && echo "Powkiddy RGB10 Max Detected" && EXFATONINTERNAL=1 && echo "Enabled Exfat partition on OS SD Card"
 [ -f /mnt/rk3326-gameforce-linux.dtb ] && DEVICE=5 && echo "Gameforce Handheld Detected" && EXFATONINTERNAL=1 && echo "Enabled Exfat partition on OS SD Card"

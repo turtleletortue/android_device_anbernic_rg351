@@ -19,25 +19,25 @@ include device/anbernic/common/BoardConfig.mk
 $(call inherit-product, device/anbernic/common/device.mk)
 
 # Inherit from device-specific part of the product configuration
-$(call inherit-product, device/anbernic/rg351mplus/device.mk)
+$(call inherit-product, device/anbernic/rg351mp/device.mk)
 
 # Boot animation
 TARGET_SCREEN_HEIGHT := 480
 TARGET_SCREEN_WIDTH := 640
 
-PRODUCT_NAME := lineage_rg351mplus
-PRODUCT_DEVICE := rg351mplus
+PRODUCT_NAME := lineage_rg351mp
+PRODUCT_DEVICE := rg351mp
 PRODUCT_MANUFACTURER := Anbernic
 PRODUCT_BRAND := Anbernic
-PRODUCT_MODEL := LineageOS for Anbernic rg351mplus
+PRODUCT_MODEL := LineageOS for Anbernic rg351mp
 
 
 PRODUCT_GMS_CLIENTID_BASE := android-rockchip
 
 PRODUCT_BUILD_PROP_OVERRIDES += \
-	TARGET_DEVICE="rg351mplus" \
-	PRODUCT_NAME="rg351mplus" \
-	PRIVATE_BUILD_DESC="lineage_rg351mplus-userdebug 11 RP1A.201005.004 test-keys"
+	TARGET_DEVICE="rg351mp" \
+	PRODUCT_NAME="rg351mp" \
+	PRIVATE_BUILD_DESC="lineage_rg351mp-userdebug 11 RP1A.201005.004 test-keys"
 
 # Set BUILD_FINGERPRINT variable to be picked up by both system and vendor build.prop
 BUILD_FINGERPRINT := google/ryu/dragon:8.1.0/OPM1.171019.016/4503492:user/release-keys

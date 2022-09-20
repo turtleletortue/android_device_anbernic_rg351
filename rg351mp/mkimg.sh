@@ -19,6 +19,8 @@ else
     cp ../common/resizing/prebuilt/Image-resizing BOOT/
     cp $OUTDIR/obj/KERNEL_OBJ/arch/arm64/boot/Image BOOT/
     cp $OUTDIR/obj/KERNEL_OBJ/arch/arm64/boot/dts/rockchip/rk3326-$DEVICE.dtb BOOT/
+    # Workaround, copy over as mplus dtb also (resizing script checks for mplus dtb)
+    cp $OUTDIR/obj/KERNEL_OBJ/arch/arm64/boot/dts/rockchip/rk3326-$DEVICE.dtb BOOT/rk3326-rg351mplus.dtb
 	echo "Creating image file $IMGNAME..."
 	dd if=/dev/zero of=$IMGNAME bs=1M count=$(echo "$IMGSIZE*1024" | bc)
 	sync

@@ -1,4 +1,3 @@
-# Remove 351Droid bootanimation
 cd ../../../../vendor/lineage
 git reset --hard
 git clean -f -d
